@@ -1,0 +1,830 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="LeetCode,C,Java,String,Dynamic Programming," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="LeetCode第三题。
+Question link
+ProblemGiven a string, find the length of the longest substring without repeating characters.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode3 Longest Substring Without Repeating Characters">
+<meta property="og:url" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/index.html">
+<meta property="og:site_name" content="Cong's blog">
+<meta property="og:description" content="LeetCode第三题。
+Question link
+ProblemGiven a string, find the length of the longest substring without repeating characters.">
+<meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/dp1.jpg">
+<meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/dp2.jpg">
+<meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/example.png">
+<meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/c_runtime1.png">
+<meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/java_runtime.png">
+<meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/c_runtime2.png">
+<meta property="og:updated_time" content="2017-02-17T07:25:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LeetCode3 Longest Substring Without Repeating Characters">
+<meta name="twitter:description" content="LeetCode第三题。
+Question link
+ProblemGiven a string, find the length of the longest substring without repeating characters.">
+<meta name="twitter:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/dp1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/"/>
+
+
+
+
+
+  <title> LeetCode3 Longest Substring Without Repeating Characters | Cong's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Cong's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why so serious?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Cong">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Cong's blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Cong's blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                LeetCode3 Longest Substring Without Repeating Characters
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-17T13:28:23+08:00">
+                2017-02-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index">
+                    <span itemprop="name">LeetCode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+          
+          
+            <div class="post-tags">
+            
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+            
+              <a href="/tags/C/" rel="tag"># C</a>
+            
+              <a href="/tags/Java/" rel="tag"># Java</a>
+            
+              <a href="/tags/String/" rel="tag"># String</a>
+            
+              <a href="/tags/Dynamic-Programming/" rel="tag"># Dynamic Programming</a>
+            
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>LeetCode第三题。</p>
+<p><a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/" target="_blank" rel="external">Question link</a></p>
+<h1 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h1><p>Given a string, find the length of the longest substring without repeating characters.</p>
+<a id="more"></a>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Given &quot;abcabcbb&quot;, the answer is &quot;abc&quot;, which the length is 3.</div><div class="line"></div><div class="line">Given &quot;bbbbb&quot;, the answer is &quot;b&quot;, with the length of 1.</div><div class="line"></div><div class="line">Given &quot;pwwkew&quot;, the answer is &quot;wke&quot;, with the length of 3.</div><div class="line">Note that the answer must be a substring, &quot;pwke&quot; is a subsequence and not a substring.</div></pre></td></tr></table></figure>
+<h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><p>字符串处理经常在算法中出现，所用的方法也千变万化。本题希望找到字符串中最长的没有重复字符的子串。<br>首先，最简单的方法当然是暴力破解。从每个字符开始，向后寻找符合要求的最长子串，代码基本是如下三层循环，复杂度为$O(n^3)$：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s = <span class="string">"abcadfasdf"</span>;</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span> ; i &lt; size ; i++)</div><div class="line">    <span class="keyword">for</span> (j = i+<span class="number">1</span> ; j &lt; size ; j++)</div><div class="line">        <span class="comment">//check whether the character has appeared</span></div><div class="line">        <span class="keyword">for</span> (k = i ; k &lt; j ; k++)</div><div class="line">            <span class="comment">//...    </span></div><div class="line">    <span class="comment">//update temp longest length</span></div></pre></td></tr></table></figure></p>
+<p>当然，引入一个hash数组可以减少一些计算复杂度。由于char类型占1byte，8bit，有256种可能，所以引入一个size为256的数组，用于记录该字符是否出现过，在检查是否重复时可以避免循环，复杂度降为$O(n^2)$。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s = <span class="string">"abcadfasdf"</span>;</div><div class="line"><span class="keyword">int</span> hash[<span class="number">256</span>];</div><div class="line"><span class="built_in">memset</span>(hash, <span class="number">0</span> , <span class="number">256</span>);</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span> ; i &lt; size ; i++)</div><div class="line">    <span class="keyword">for</span> (j = i+<span class="number">1</span> ; j &lt; size ; j++)</div><div class="line">        hash[s[j]] == <span class="number">0</span>? </div><div class="line">        <span class="comment">//...</span></div><div class="line">    <span class="comment">//update temp longest length</span></div></pre></td></tr></table></figure></p>
+<p>进一步降低复杂度，就不能依靠暴力破解的方法，需要引入动态规划的思想。</p>
+<h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><p>动态规划与分治法的想法类似，目标是将待求解的问题分解为若干个规模更小的子问题，求解子问题后再合并，最终得到原问题的解。<br><img src="/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/dp1.jpg" alt="子问题分解" title="子问题分解"><br>动态规划与分治法的不同在于，分治法的子问题是独立的，相互不包含（例如快速排序），而动态规划分解后的子问题往往不是相互独立的。<br><img src="/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/dp2.jpg" alt="动态规划子问题" title="动态规划子问题"><br>动态规划有以下几个基本步骤：<br>动态规划基本步骤:</p>
+<ol>
+<li>找出最优解的性质，并刻划其结构特征。</li>
+<li>递归地定义最优值。</li>
+<li>以自底向上的方式计算出最优值。</li>
+<li>根据计算最优值时得到的信息，构造最优解。</li>
+</ol>
+<p>放到这个问题里来看，寻找最长不重复子串的过程中，新子串的长度与重复字符出现的位置有关。假如当前寻找的子串起始位置为x，下一个字符位置为y，如果该字符上一次出现的位置z在x之前（z<x），或者该字符没有出现过，那么该字符就可以纳入到当前符合要求的子串中，继续向后寻找；如果该字符上一次出现的位置在x之后(z>=x)，那么以当前位置为结尾的符合要求的子串从z+1开始，到当前位置结束。<br>下图以字符串”aadbcabcdeaa”为例，直观地给出了计算过程：<br><img src="/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/example.png" alt="example" title="example"><br>每一行记录的都是到当前字符的最长不重复子串，第一个字符为起始位置<code>last_start</code>。蓝色标注的第1，5，6，7，10，11次循环中，当前字符上一次出现位置（<code>last_loc</code>）都在上一次计算的起始位置<code>last_start</code>之后（<code>last_loc&gt;=last_start</code>），所以<code>last_start</code>更新为<code>last_loc+1</code>；其余循环中，字符上一次出现位置都在当前子串起始位置之前，（<code>last_loc&lt;last_start</code>），对于当前子串没有影响，可以将字符纳入到当前子串中。如此计算，最后可得到符合要求的最长不重复子串。<br>计算<code>last_loc</code>数组可以用上文所述的hash方法，复杂度为$O(n)$，使用动态规划的方法，计算子串的复杂度也为$O(n)$，最后在线性时间内可以求解这个问题。</x），或者该字符没有出现过，那么该字符就可以纳入到当前符合要求的子串中，继续向后寻找；如果该字符上一次出现的位置在x之后(z></p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><h3 id="C"><a href="#C" class="headerlink" title="C"></a>C</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(<span class="keyword">char</span>* s)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> size;</div><div class="line">    <span class="keyword">for</span> (size = <span class="number">0</span> ; s[size] ; size++)</div><div class="line">        ;</div><div class="line">    <span class="comment">// empty string</span></div><div class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>)</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> last_loc[size];</div><div class="line">    <span class="keyword">int</span> hash[<span class="number">256</span>];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">256</span> ; i++)</div><div class="line">        hash[i] = <span class="number">-1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; size ; i++)</div><div class="line">    &#123;</div><div class="line">        last_loc[i] = hash[s[i]];</div><div class="line">        hash[s[i]] = i;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> longest = <span class="number">1</span>, last_start = <span class="number">0</span>, temp_max = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i&lt;size ; i++)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (last_loc[i] &gt;= last_start)</div><div class="line">            last_start = last_loc[i] + <span class="number">1</span>;</div><div class="line">        temp_max = i - last_start + <span class="number">1</span>;</div><div class="line">        longest = temp_max &gt; longest ? temp_max : longest;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> longest;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<img src="/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/c_runtime1.png" alt="Time used for C solution" title="Time used for C solution">
+<h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (s.length() == <span class="number">0</span>)</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span>[] hash = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">256</span>];</div><div class="line">        <span class="keyword">int</span>[] last_loc = <span class="keyword">new</span> <span class="keyword">int</span>[s.length()];</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">256</span> ; i++)</div><div class="line">            hash[i] = -<span class="number">1</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; s.length() ; i++)</div><div class="line">        &#123;</div><div class="line">            last_loc[i] = hash[s.charAt(i)];</div><div class="line">            hash[s.charAt(i)] = i;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> longest = <span class="number">0</span>, last_start = <span class="number">0</span>, temp_max = <span class="number">1</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; s.length() ; i++)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (last_loc[i] &gt;= last_start)</div><div class="line">                last_start = last_loc[i] + <span class="number">1</span>;</div><div class="line">            temp_max = i - last_start + <span class="number">1</span>;</div><div class="line">            longest = temp_max &gt; longest ? temp_max : longest;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        </div><div class="line">        <span class="keyword">return</span> longest;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<img src="/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/java_runtime.png" alt="Time used for Java solution" title="Time used for Java solution">
+<p>没有用到什么特别的，对于这题来说String类感觉还不如C来的方便。</p>
+<h1 id="Discuss"><a href="#Discuss" class="headerlink" title="Discuss"></a>Discuss</h1><p>本以为写到这个程度已经可以了，看了Discuss中的<a href="https://discuss.leetcode.com/topic/8232/11-line-simple-java-solution-o-n-with-explanation" target="_blank" rel="external">这个解答</a>才发现，何必hash时候循环一遍，再循环一遍求符合要求的子串，完全可以放在一次循环里做。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="function">nt <span class="title">lengthOfLongestSubstring</span><span class="params">(<span class="keyword">char</span>* s)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> size;</div><div class="line">    <span class="keyword">for</span> (size = <span class="number">0</span> ; s[size] ; size++)</div><div class="line">        ;</div><div class="line">    <span class="comment">// empty string</span></div><div class="line">    <span class="keyword">if</span> (size == <span class="number">0</span>)</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> hash[<span class="number">256</span>];</div><div class="line">    <span class="comment">//initialize</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">256</span> ; i++)</div><div class="line">        hash[i] = <span class="number">-1</span>;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">int</span> longest = <span class="number">1</span>, last_start = <span class="number">0</span>, temp_max = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; size ; i++)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (hash[s[i]] &gt;= last_start)</div><div class="line">            last_start = hash[s[i]] + <span class="number">1</span>;</div><div class="line">        temp_max = i - last_start + <span class="number">1</span>;</div><div class="line">        longest = temp_max &gt; longest ? temp_max : longest;</div><div class="line">        hash[s[i]] = i;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    </div><div class="line">    <span class="keyword">return</span> longest;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<img src="/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/c_runtime2.png" alt="Time used for C solution" title="Time used for C solution">
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+          
+            <a href="/tags/C/" rel="tag"># C</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/String/" rel="tag"># String</a>
+          
+            <a href="/tags/Dynamic-Programming/" rel="tag"># Dynamic Programming</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/13/LeetCode2-Add-Two-Numbers/" rel="next" title="LeetCode2 Add Two Numbers">
+                <i class="fa fa-chevron-left"></i> LeetCode2 Add Two Numbers
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/"
+           data-title="LeetCode3 Longest Substring Without Repeating Characters" data-url="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Cong" />
+          <p class="site-author-name" itemprop="name">Cong</p>
+          <p class="site-description motion-element" itemprop="description">Just someone who try to press the key in right order.</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/i4never" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=88400567" target="_blank" title="Music">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Music
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://u.dajie.com/futsung" target="_blank" title="Resume">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Resume
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem"><span class="nav-number">1.</span> <span class="nav-text">Problem</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Examples"><span class="nav-number">1.1.</span> <span class="nav-text">Examples</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solution"><span class="nav-number">2.</span> <span class="nav-text">Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamic-Programming"><span class="nav-number">2.1.</span> <span class="nav-text">Dynamic Programming</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">2.2.</span> <span class="nav-text">Code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C"><span class="nav-number">2.2.1.</span> <span class="nav-text">C</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java"><span class="nav-number">2.2.2.</span> <span class="nav-text">Java</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Discuss"><span class="nav-number">3.</span> <span class="nav-text">Discuss</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cong</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"futsung"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
