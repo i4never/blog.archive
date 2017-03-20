@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="LeetCode,C,Java,String,Dynamic Programming," />
+  <meta name="keywords" content="LeetCode,Dynamic Programming,C,Java,String," />
 
 
 
@@ -86,26 +86,26 @@
 
 <meta name="description" content="LeetCode第三题。
 Question link
-ProblemGiven a string, find the length of the longest substring without repeating characters.">
+DescriptionGiven a string, find the length of the longest substring without repeating characters.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LeetCode3 Longest Substring Without Repeating Characters">
 <meta property="og:url" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/index.html">
 <meta property="og:site_name" content="Cong's blog">
 <meta property="og:description" content="LeetCode第三题。
 Question link
-ProblemGiven a string, find the length of the longest substring without repeating characters.">
+DescriptionGiven a string, find the length of the longest substring without repeating characters.">
 <meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/dp1.jpg">
 <meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/dp2.jpg">
 <meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/example.png">
 <meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/c_runtime1.png">
 <meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/java_runtime.png">
 <meta property="og:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/c_runtime2.png">
-<meta property="og:updated_time" content="2017-02-17T07:25:56.000Z">
+<meta property="og:updated_time" content="2017-03-20T06:47:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LeetCode3 Longest Substring Without Repeating Characters">
 <meta name="twitter:description" content="LeetCode第三题。
 Question link
-ProblemGiven a string, find the length of the longest substring without repeating characters.">
+DescriptionGiven a string, find the length of the longest substring without repeating characters.">
 <meta name="twitter:image" content="http://futsung.cn/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/dp1.jpg">
 
 
@@ -377,13 +377,13 @@ ProblemGiven a string, find the length of the longest substring without repeatin
             
               <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
             
+              <a href="/tags/Dynamic-Programming/" rel="tag"># Dynamic Programming</a>
+            
               <a href="/tags/C/" rel="tag"># C</a>
             
               <a href="/tags/Java/" rel="tag"># Java</a>
             
               <a href="/tags/String/" rel="tag"># String</a>
-            
-              <a href="/tags/Dynamic-Programming/" rel="tag"># Dynamic Programming</a>
             
             </div>
           
@@ -403,9 +403,9 @@ ProblemGiven a string, find the length of the longest substring without repeatin
       
         <p>LeetCode第三题。</p>
 <p><a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/" target="_blank" rel="external">Question link</a></p>
-<h1 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h1><p>Given a string, find the length of the longest substring without repeating characters.</p>
+<h1 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h1><p>Given a string, find the length of the longest substring without repeating characters.</p>
 <a id="more"></a>
-<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Given &quot;abcabcbb&quot;, the answer is &quot;abc&quot;, which the length is 3.</div><div class="line"></div><div class="line">Given &quot;bbbbb&quot;, the answer is &quot;b&quot;, with the length of 1.</div><div class="line"></div><div class="line">Given &quot;pwwkew&quot;, the answer is &quot;wke&quot;, with the length of 3.</div><div class="line">Note that the answer must be a substring, &quot;pwke&quot; is a subsequence and not a substring.</div></pre></td></tr></table></figure>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Given &quot;abcabcbb&quot;, the answer is &quot;abc&quot;, which the length is 3.</div><div class="line"></div><div class="line">Given &quot;bbbbb&quot;, the answer is &quot;b&quot;, with the length of 1.</div><div class="line"></div><div class="line">Given &quot;pwwkew&quot;, the answer is &quot;wke&quot;, with the length of 3.</div><div class="line">Note that the answer must be a substring, &quot;pwke&quot; is a subsequence and not a substring.</div></pre></td></tr></table></figure>
 <h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><p>字符串处理经常在算法中出现，所用的方法也千变万化。本题希望找到字符串中最长的没有重复字符的子串。<br>首先，最简单的方法当然是暴力破解。从每个字符开始，向后寻找符合要求的最长子串，代码基本是如下三层循环，复杂度为$O(n^3)$：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s = <span class="string">"abcadfasdf"</span>;</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span> ; i &lt; size ; i++)</div><div class="line">    <span class="keyword">for</span> (j = i+<span class="number">1</span> ; j &lt; size ; j++)</div><div class="line">        <span class="comment">//check whether the character has appeared</span></div><div class="line">        <span class="keyword">for</span> (k = i ; k &lt; j ; k++)</div><div class="line">            <span class="comment">//...    </span></div><div class="line">    <span class="comment">//update temp longest length</span></div></pre></td></tr></table></figure></p>
 <p>当然，引入一个hash数组可以减少一些计算复杂度。由于char类型占1byte，8bit，有256种可能，所以引入一个size为256的数组，用于记录该字符是否出现过，在检查是否重复时可以避免循环，复杂度降为$O(n^2)$。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">char</span> s = <span class="string">"abcadfasdf"</span>;</div><div class="line"><span class="keyword">int</span> hash[<span class="number">256</span>];</div><div class="line"><span class="built_in">memset</span>(hash, <span class="number">0</span> , <span class="number">256</span>);</div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span> ; i &lt; size ; i++)</div><div class="line">    <span class="keyword">for</span> (j = i+<span class="number">1</span> ; j &lt; size ; j++)</div><div class="line">        hash[s[j]] == <span class="number">0</span>? </div><div class="line">        <span class="comment">//...</span></div><div class="line">    <span class="comment">//update temp longest length</span></div></pre></td></tr></table></figure></p>
 <p>进一步降低复杂度，就不能依靠暴力破解的方法，需要引入动态规划的思想。</p>
@@ -449,13 +449,13 @@ ProblemGiven a string, find the length of the longest substring without repeatin
           
             <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
           
+            <a href="/tags/Dynamic-Programming/" rel="tag"># Dynamic Programming</a>
+          
             <a href="/tags/C/" rel="tag"># C</a>
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
             <a href="/tags/String/" rel="tag"># String</a>
-          
-            <a href="/tags/Dynamic-Programming/" rel="tag"># Dynamic Programming</a>
           
         </div>
       
@@ -550,7 +550,7 @@ ProblemGiven a string, find the length of the longest substring without repeatin
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -632,7 +632,7 @@ ProblemGiven a string, find the length of the longest substring without repeatin
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem"><span class="nav-number">1.</span> <span class="nav-text">Problem</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Examples"><span class="nav-number">1.1.</span> <span class="nav-text">Examples</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solution"><span class="nav-number">2.</span> <span class="nav-text">Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamic-Programming"><span class="nav-number">2.1.</span> <span class="nav-text">Dynamic Programming</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">2.2.</span> <span class="nav-text">Code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C"><span class="nav-number">2.2.1.</span> <span class="nav-text">C</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java"><span class="nav-number">2.2.2.</span> <span class="nav-text">Java</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Discuss"><span class="nav-number">3.</span> <span class="nav-text">Discuss</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Description"><span class="nav-number">1.</span> <span class="nav-text">Description</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">1.1.</span> <span class="nav-text">Example</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solution"><span class="nav-number">2.</span> <span class="nav-text">Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamic-Programming"><span class="nav-number">2.1.</span> <span class="nav-text">Dynamic Programming</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">2.2.</span> <span class="nav-text">Code</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C"><span class="nav-number">2.2.1.</span> <span class="nav-text">C</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java"><span class="nav-number">2.2.2.</span> <span class="nav-text">Java</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Discuss"><span class="nav-number">3.</span> <span class="nav-text">Discuss</span></a></li></ol></div>
             
 
           </div>

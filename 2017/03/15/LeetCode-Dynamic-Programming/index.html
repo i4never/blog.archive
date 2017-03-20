@@ -1,0 +1,864 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="LeetCode,Dynamic Programming,C," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="刷到leetcode第十题Regular Expression Matching，纠结了非常长的时间，终于accept。以往刷题都是看哪题顺(jian)眼(dan)就刷哪题，做完这题之后打算按一个一个Tag做，先从专题Dynamic Programming开始。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode Dynamic Programming I">
+<meta property="og:url" content="http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/index.html">
+<meta property="og:site_name" content="Cong's blog">
+<meta property="og:description" content="刷到leetcode第十题Regular Expression Matching，纠结了非常长的时间，终于accept。以往刷题都是看哪题顺(jian)眼(dan)就刷哪题，做完这题之后打算按一个一个Tag做，先从专题Dynamic Programming开始。">
+<meta property="og:image" content="http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/10_exp.png">
+<meta property="og:image" content="http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/10_dp_runtime.png">
+<meta property="og:updated_time" content="2017-03-20T08:16:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LeetCode Dynamic Programming I">
+<meta name="twitter:description" content="刷到leetcode第十题Regular Expression Matching，纠结了非常长的时间，终于accept。以往刷题都是看哪题顺(jian)眼(dan)就刷哪题，做完这题之后打算按一个一个Tag做，先从专题Dynamic Programming开始。">
+<meta name="twitter:image" content="http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/10_exp.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/"/>
+
+
+
+
+
+  <title> LeetCode Dynamic Programming I | Cong's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Cong's blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">Why so serious?</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-resources">
+          <a href="/resources" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            资源
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Cong">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.png">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Cong's blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Cong's blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                LeetCode Dynamic Programming I
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T09:50:41+08:00">
+                2017-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index">
+                    <span itemprop="name">LeetCode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/15/LeetCode-Dynamic-Programming/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/15/LeetCode-Dynamic-Programming/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+          
+          
+            <div class="post-tags">
+            
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+            
+              <a href="/tags/Dynamic-Programming/" rel="tag"># Dynamic Programming</a>
+            
+              <a href="/tags/C/" rel="tag"># C</a>
+            
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>刷到leetcode第十题<a href="https://leetcode.com/problems/regular-expression-matching/#/description" target="_blank" rel="external">Regular Expression Matching</a>，纠结了非常长的时间，终于accept。以往刷题都是看哪题顺(jian)眼(dan)就刷哪题，做完这题之后打算按一个一个Tag做，先从<a href="https://leetcode.com/tag/dynamic-programming" target="_blank" rel="external">专题Dynamic Programming</a>开始。<br><a id="more"></a></p>
+<h1 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h1><a href="/2017/02/17/LeetCode3-Longest-Substring-Without-Repeating-Characters/" title="Longest Substring Without Repeating Characters">Longest Substring Without Repeating Characters</a>
+<p>这个问题用到过动态规划，主要的想法是将待求解的问题分解为若干个规模更小的子问题，求解子问题后再合并，最终得到原问题的解。<br>动态规划基本步骤:</p>
+<ol>
+<li>找出最优解的性质，并刻划其结构特征。</li>
+<li>递归地定义最优值。</li>
+<li>以自底向上的方式计算出最优值。</li>
+<li>根据计算最优值时得到的信息，构造最优解。<br>刷了几题之后，感觉DP方法最难的就是怎样定义子问题，以及如何通过子问题的解得到原问题的解。考虑不清楚怎样刻画问题时，可以先试图用递归的方法定义问题。</li>
+</ol>
+<h1 id="Solved-Problems"><a href="#Solved-Problems" class="headerlink" title="Solved Problems"></a>Solved Problems</h1><h2 id="10-Regular-Expression-Matching"><a href="#10-Regular-Expression-Matching" class="headerlink" title="[10] Regular Expression Matching"></a>[10] Regular Expression Matching</h2><h3 id="Description-amp-Example"><a href="#Description-amp-Example" class="headerlink" title="Description &amp; Example"></a>Description &amp; Example</h3><p>Implement regular expression matching with support for ‘.’ and ‘*’.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&apos;.&apos; Matches any single character.</div><div class="line">&apos;*&apos; Matches zero or more of the preceding element.</div><div class="line"></div><div class="line">The matching should cover the entire input string (not partial).</div><div class="line"></div><div class="line">The function prototype should be:</div><div class="line">bool isMatch(const char *s, const char *p)</div><div class="line"></div><div class="line">Some examples:</div><div class="line">isMatch(&quot;aa&quot;,&quot;a&quot;) → false</div><div class="line">isMatch(&quot;aa&quot;,&quot;aa&quot;) → true</div><div class="line">isMatch(&quot;aaa&quot;,&quot;aa&quot;) → false</div><div class="line">isMatch(&quot;aa&quot;, &quot;a*&quot;) → true</div><div class="line">isMatch(&quot;aa&quot;, &quot;.*&quot;) → true</div><div class="line">isMatch(&quot;ab&quot;, &quot;.*&quot;) → true</div><div class="line">isMatch(&quot;aab&quot;, &quot;c*a*b&quot;) → true</div></pre></td></tr></table></figure></p>
+<h3 id="Sub-Problem"><a href="#Sub-Problem" class="headerlink" title="Sub Problem"></a>Sub Problem</h3><p>首先递归地定义问题，假设当前模式串与字符串<code>p[i] s[j]</code>匹配，那么下一个要匹配的是<code>p[i+1] s[j+1]</code>，有如下几种情况：</p>
+<ol>
+<li><p><code>p[i+1] == &#39;\0&#39;</code>：匹配结束，如果<code>s[j+1]</code>也是<code>\0</code>的话匹配完成，否则两者不匹配</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">               j j+1</div><div class="line">s: a b c d e f g \0</div><div class="line">         i i+1</div><div class="line">p: a . * g \0</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>p[i+1] != &#39;\0&#39; &amp;&amp; p[i+1] != &#39;*&#39;</code>：如果<code>p[i+1] == &#39;.&#39; || p[i+1] == s[i+1]</code>则两者匹配，否则不匹配。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">               j j+1</div><div class="line">s: a b c d e f g h s d\0</div><div class="line">         i i+1</div><div class="line">p: a . * g .  \0</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>p[i+1] == &#39;*&#39;</code>：这种情况最复杂。出现‘*’意味着模式串‘*’前的字符可以不出现或者出现任意多次。该字符不出现的情况下，如果模式串<code>p[i-1]</code>与<code>s[j+1]</code>匹配的话，<code>p[i+1]</code>与<code>s[j+1]</code>匹配；如果<code>p[i-1]</code>与<code>s[j+1]</code>匹配的前提下，<code>s[j+1]</code>之后出现任意多个字符<code>p[i]</code>，都与模式串<code>p[i+1]</code>匹配。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">            j+1</div><div class="line">s: a b c d e f h \0</div><div class="line">            i-1 i+1</div><div class="line">p: a b c d e f g * h \0</div><div class="line"></div><div class="line">            j+1</div><div class="line">s: a b c d e f g g g g h \0</div><div class="line">            i-1 i+1</div><div class="line">p: a b c d e f g * h \0</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如此，构造一个bool数组<code>m[p_len][s_len]</code>来记录<code>p[i] s[j]</code>的匹配情况，从上到下逐行计算，就可以判断模式串是否匹配。有个tricky的地方是空串的匹配，构造数组的时候在字符串与模式串的开头多加了一行／列，方便处理。假设带匹配字符串与模式串分别为<code>s = &quot;abcdddefg&quot; p = &quot;z*y*abcd*z*e.*&quot;</code>，则计算结果如下：<br><img src="/2017/03/15/LeetCode-Dynamic-Programming/10_exp.png" alt="Example" title="Example"><br>其中黄色标注的是初识计算空字符串的匹配结果，很好理解，空字符串只能与类似于“x<em>x</em>x*”匹配。</p>
+<h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">char</span> *p)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> s_len = <span class="number">0</span>, p_len = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span>(s[s_len] != <span class="number">0</span>) s_len++;</div><div class="line">    <span class="keyword">while</span>(p[p_len] != <span class="number">0</span>) p_len++;</div><div class="line">    s_len++;p_len++;</div><div class="line"></div><div class="line">    <span class="keyword">bool</span> m[p_len][s_len];</div><div class="line">    <span class="built_in">memset</span>(m, <span class="number">0</span>, p_len*s_len);</div><div class="line">    m[<span class="number">0</span>][<span class="number">0</span>] = <span class="literal">true</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i &lt; p_len ; i++)</div><div class="line">        m[i][<span class="number">0</span>] = i &gt; <span class="number">1</span> &amp;&amp; p[i<span class="number">-1</span>] == <span class="string">'*'</span> &amp;&amp; m[i<span class="number">-2</span>][<span class="number">0</span>] ? <span class="literal">true</span> : <span class="literal">false</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i &lt; p_len ; i++)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span> ; j &lt; s_len ; j++)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (p[i<span class="number">-1</span>] != <span class="string">'*'</span>)</div><div class="line">                m[i][j] = m[i<span class="number">-1</span>][j<span class="number">-1</span>] &amp;&amp; (p[i<span class="number">-1</span>] == <span class="string">'.'</span> || p[i<span class="number">-1</span>] == s[j<span class="number">-1</span>]);</div><div class="line">            <span class="keyword">else</span></div><div class="line">                m[i][j] = m[i<span class="number">-2</span>][j] || ((m[i][j<span class="number">-1</span>]) &amp;&amp; (p[i<span class="number">-2</span>] == <span class="string">'.'</span> || p[i<span class="number">-2</span>] == s[j<span class="number">-1</span>]));</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> m[p_len<span class="number">-1</span>][s_len<span class="number">-1</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<img src="/2017/03/15/LeetCode-Dynamic-Programming/10_dp_runtime.png" alt="Time used" title="Time used">
+<h2 id="44-Wildcard-Matching"><a href="#44-Wildcard-Matching" class="headerlink" title="[44] Wildcard Matching"></a>[44] Wildcard Matching</h2><h3 id="Description-amp-Example-1"><a href="#Description-amp-Example-1" class="headerlink" title="Description &amp; Example"></a>Description &amp; Example</h3><p>Implement wildcard pattern matching with support for ‘?’ and ‘*’.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&apos;?&apos; Matches any single character.</div><div class="line">&apos;*&apos; Matches any sequence of characters (including the empty sequence).</div><div class="line"></div><div class="line">The matching should cover the entire input string (not partial).</div><div class="line"></div><div class="line">The function prototype should be:</div><div class="line">bool isMatch(const char *s, const char *p)</div><div class="line"></div><div class="line">Some examples:</div><div class="line">isMatch(&quot;aa&quot;,&quot;a&quot;) → false</div><div class="line">isMatch(&quot;aa&quot;,&quot;aa&quot;) → true</div><div class="line">isMatch(&quot;aaa&quot;,&quot;aa&quot;) → false</div><div class="line">isMatch(&quot;aa&quot;, &quot;*&quot;) → true</div><div class="line">isMatch(&quot;aa&quot;, &quot;a*&quot;) → true</div><div class="line">isMatch(&quot;ab&quot;, &quot;?*&quot;) → true</div><div class="line">isMatch(&quot;aab&quot;, &quot;c*a*b&quot;) → false</div></pre></td></tr></table></figure></p>
+<h3 id="Sub-Problem-1"><a href="#Sub-Problem-1" class="headerlink" title="Sub Problem"></a>Sub Problem</h3><p>与上题相似的是这题，唯一的区别是‘*’在这里相当于第10题中的字符+‘*’，大家可以试着自己分解一下子问题。</p>
+<h3 id="Code-1"><a href="#Code-1" class="headerlink" title="Code"></a>Code</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isMatch</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">char</span> *p)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> s_len = <span class="number">0</span>, p_len = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span>(s[s_len] != <span class="number">0</span>) s_len++;</div><div class="line">    <span class="keyword">while</span>(p[p_len] != <span class="number">0</span>) p_len++;</div><div class="line">    s_len++;p_len++;</div><div class="line"></div><div class="line">    <span class="keyword">bool</span> m[p_len][s_len];</div><div class="line">    <span class="built_in">memset</span>(m, <span class="number">0</span>, p_len*s_len);</div><div class="line">    m[<span class="number">0</span>][<span class="number">0</span>] = <span class="literal">true</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i &lt; p_len ; i++)</div><div class="line">        m[i][<span class="number">0</span>] = p[i<span class="number">-1</span>] == <span class="string">'*'</span> &amp;&amp; m[i<span class="number">-1</span>][<span class="number">0</span>] ? <span class="literal">true</span> : <span class="literal">false</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i &lt; p_len ; i++)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span> ; j &lt; s_len ; j++)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (p[i<span class="number">-1</span>] != <span class="string">'*'</span>)</div><div class="line">                m[i][j] = m[i<span class="number">-1</span>][j<span class="number">-1</span>] &amp;&amp; (p[i<span class="number">-1</span>] == <span class="string">'?'</span> || p[i<span class="number">-1</span>] == s[j<span class="number">-1</span>]);</div><div class="line">            <span class="keyword">else</span></div><div class="line">                m[i][j] = m[i<span class="number">-1</span>][j] || m[i][j<span class="number">-1</span>];</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h2 id="32-Longest-Valid-Parentheses"><a href="#32-Longest-Valid-Parentheses" class="headerlink" title="[32] Longest Valid Parentheses"></a>[32] Longest Valid Parentheses</h2><h3 id="Description-amp-Example-2"><a href="#Description-amp-Example-2" class="headerlink" title="Description &amp; Example"></a>Description &amp; Example</h3><p>Given a string containing just the characters ‘(‘ and ‘)’, find the length of the longest valid (well-formed) parentheses substring.<br>For “(()”, the longest valid parentheses substring is “()”, which has length = 2.</p>
+<p>Another example is “)()())”, where the longest valid parentheses substring is “()()”, which has length = 4.</p>
+<h3 id="Sub-Problem-2"><a href="#Sub-Problem-2" class="headerlink" title="Sub Problem"></a>Sub Problem</h3><p>假设待匹配的字符串为p，当前计算到<code>p[i]</code>为止的最长合法串，下一个需要计算<code>p[i+1]</code>，数组<code>l[i]</code>纪录以<code>p[i]</code>结尾的合法子串长度，有以下几种情况。</p>
+<ol>
+<li>如果<code>p[i+1] == &#39;(&#39;</code>，因为不会有以‘(’结尾的合法串，即<code>l[i+1] = 0</code>。</li>
+<li>如果<code>p[i+1] == &#39;)&#39;</code>那么需要判断<code>p[i]</code>是否为‘(’：<br> 如果<code>p[i] == &#39;(&#39;</code>，那么以<code>p[i+1]</code>结尾的合法子串长度是以<code>p[i]</code>结尾的合法子串长度加2，即<code>l[i+1]=l[i-1]+2</code>。<br> 如果<code>p[i] == &#39;(&#39;</code>那么需要找到<code>p[i-l[i]-1]</code>，判断其是否是‘(’，如果是，则这个左括号与当前右括号把中间的合法子串括了起来，共同构成一个合法串，长度为<code>l[i]+2</code>并且可能与<code>p[i-l[i]-2]</code>链接起来，共同构成合法串。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">i   0 1 2 3 4 5 6 7 8 9</div><div class="line">p = ) ) ) ) ( ) ( ( ) )</div><div class="line">l = 0 0 0 0 0 2 0 0 2 6</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><code>l[i]</code>的最大值即为最长合法串。</p>
+<h3 id="Code-2"><a href="#Code-2" class="headerlink" title="Code"></a>Code</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">longestValidParentheses</span><span class="params">(<span class="keyword">char</span>* s)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (s[<span class="number">0</span>] == <span class="number">0</span>)</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> len = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span> (s[len] != <span class="number">0</span>) len++;</div><div class="line">    <span class="keyword">int</span> l[len], max = <span class="number">0</span>;</div><div class="line">    l[<span class="number">0</span>] = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i &lt; len ; i++)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (s[i] == <span class="string">'('</span>)</div><div class="line">            l[i] = <span class="number">0</span>;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (s[i<span class="number">-1</span>] == <span class="string">'('</span>)</div><div class="line">                l[i] = i&gt;<span class="number">1</span> ? l[i<span class="number">-2</span>] + <span class="number">2</span> : <span class="number">2</span>;</div><div class="line">            <span class="keyword">else</span></div><div class="line">                l[i] = s[i<span class="number">-1</span>-l[i<span class="number">-1</span>]] == <span class="string">'('</span> ? l[i<span class="number">-1</span>] + <span class="number">2</span> + (i<span class="number">-2</span>-l[i<span class="number">-1</span>] &gt;= <span class="number">0</span> ? l[i<span class="number">-2</span>-l[i<span class="number">-1</span>]] : <span class="number">0</span>) : <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">        max = max &gt;l[i] ? max : l[i];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> max;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="53-Maximum-Subarray"><a href="#53-Maximum-Subarray" class="headerlink" title="[53] Maximum Subarray"></a>[53] Maximum Subarray</h2><h3 id="Description-amp-Example-3"><a href="#Description-amp-Example-3" class="headerlink" title="Description &amp; Example"></a>Description &amp; Example</h3><p>Find the contiguous subarray within an array (containing at least one number) which has the largest sum.<br>For example, given the array [-2,1,-3,4,-1,2,1,-5,4],<br>the contiguous subarray [4,-1,2,1] has the largest sum = 6.</p>
+<h3 id="Sub-problem"><a href="#Sub-problem" class="headerlink" title="Sub problem"></a>Sub problem</h3><p>《算法导论》开篇就是这个问题，用的是分治法，类似于quick sort的思想，先求左半边，再求右半边，然后左右合并以下。但是这里依然用动态规划的方法来求解<br>假设数组为<code>nums</code>，数组<code>m[i]</code>纪录以<code>nums[i]</code>为结尾的最大子序列和。同样的，假设当前计算到<code>m[i+1]</code></p>
+<ol>
+<li>如果<code>m[i]&lt;=0</code>，那么前面的项对最大和没有贡献，以当前元素为结尾的最大和就是他本身，即<code>m[i+1]=nums[i+1]</code></li>
+<li>如果<code>m[i]&gt;0</code>，那么<code>m[i+1]=m[i]+nums[i+1]</code><br><code>m[i]</code>的最大值即为最大和</li>
+</ol>
+<h3 id="Code-3"><a href="#Code-3" class="headerlink" title="Code"></a>Code</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> numsSize)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (numsSize == <span class="number">0</span>)</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> max = nums[<span class="number">0</span>], p[numsSize];</div><div class="line">    p[<span class="number">0</span>] = nums[<span class="number">0</span>];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i &lt; numsSize ; i++)</div><div class="line">    &#123;</div><div class="line">        p[i] = p[i<span class="number">-1</span>] &lt; <span class="number">0</span> ? nums[i] : p[i<span class="number">-1</span>] + nums[i];</div><div class="line">        max = max &gt; p[i] ? max : p[i];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> max;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="62-Unique-Paths"><a href="#62-Unique-Paths" class="headerlink" title="[62] Unique Paths"></a>[62] Unique Paths</h2><h3 id="Description-amp-Example-4"><a href="#Description-amp-Example-4" class="headerlink" title="Description &amp; Example"></a>Description &amp; Example</h3><p>A robot is located at the top-left corner of a m x n grid (marked ‘Start’ in the diagram below).</p>
+<p>The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked ‘Finish’ in the diagram below).</p>
+<p>How many possible unique paths are there?<br>Note: m and n will be at most 100.</p>
+<h3 id="Sub-problem-1"><a href="#Sub-problem-1" class="headerlink" title="Sub problem"></a>Sub problem</h3><p>这题比较简单，构造一个与map大小相等的数组，由于只能向下或者向右走，走到<code>m[i+1][j+1]</code>的方法有两种，一是先走到<code>m[i][j+1]</code>再向右走，另一种是先走到<code>m[i+1][j]</code>再向下走，也就是<code>m[i+1][j+1]=m[i][j+1]+m[i+1][j]</code>。此外注意第一行和第一列的初始化就可以了。<br><a href="https://discuss.leetcode.com/category/70/unique-paths" target="_blank" rel="external">Discuss</a>中有人提到这其实是个排列组合的问题，可以直接求解排列数，想法没有问题，但是需要计算$(m+n)!$，当m和n较小时没有问题，较大时可能超出int或者long的表示范围，带来一定的问题。</p>
+<h3 id="Code-4"><a href="#Code-4" class="headerlink" title="Code"></a>Code</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">uniquePaths</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (n == <span class="number">1</span> || m == <span class="number">1</span>)</div><div class="line">        <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">        </div><div class="line">    <span class="keyword">int</span> p[n][m];</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; n ; i++)</div><div class="line">        p[i][<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; m ; i++)</div><div class="line">        p[<span class="number">0</span>][i] = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i &lt; n ; i++)</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span> ; j &lt; m ; j++)</div><div class="line">            p[i][j] = p[i<span class="number">-1</span>][j] + p[i][j<span class="number">-1</span>];</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> p[n<span class="number">-1</span>][m<span class="number">-1</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="63-Unique-Paths-II"><a href="#63-Unique-Paths-II" class="headerlink" title="[63] Unique Paths II"></a>[63] Unique Paths II</h2><h3 id="Description-amp-Example-5"><a href="#Description-amp-Example-5" class="headerlink" title="Description &amp; Example"></a>Description &amp; Example</h3><p>Follow up for “Unique Paths”:</p>
+<p>Now consider if some obstacles are added to the grids. How many unique paths would there be?</p>
+<p>An obstacle and empty space is marked as 1 and 0 respectively in the grid.</p>
+<p>For example,<br>There is one obstacle in the middle of a 3x3 grid as illustrated below.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  [0,0,0],</div><div class="line">  [0,1,0],</div><div class="line">  [0,0,0]</div><div class="line">]</div><div class="line">The total number of unique paths is 2.</div></pre></td></tr></table></figure></p>
+<h3 id="Sub-problem-2"><a href="#Sub-problem-2" class="headerlink" title="Sub problem"></a>Sub problem</h3><p>与上题相同，注意map中标注1的格子走不到，即<code>m[i][j]=map[i][j]==1 ? 0 : m[i][j+1]+m[i+1][j]</code>。</p>
+<h3 id="Code-5"><a href="#Code-5" class="headerlink" title="Code"></a>Code</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">uniquePathsWithObstacles</span><span class="params">(<span class="keyword">int</span>** obstacleGrid, <span class="keyword">int</span> obstacleGridRowSize, <span class="keyword">int</span> obstacleGridColSize)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> p[obstacleGridRowSize][obstacleGridColSize];</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; obstacleGridRowSize ; i++)</div><div class="line">        p[i][<span class="number">0</span>] = obstacleGrid[i][<span class="number">0</span>] == <span class="number">1</span> || (i&gt;<span class="number">0</span> &amp;&amp; p[i<span class="number">-1</span>][<span class="number">0</span>] == <span class="number">0</span>) ? <span class="number">0</span> : <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; obstacleGridColSize ; i++)</div><div class="line">        p[<span class="number">0</span>][i] = obstacleGrid[<span class="number">0</span>][i] == <span class="number">1</span> || (i&gt;<span class="number">0</span> &amp;&amp; p[<span class="number">0</span>][i<span class="number">-1</span>] == <span class="number">0</span>) ? <span class="number">0</span> : <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i &lt; obstacleGridRowSize ; i++)</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span> ; j &lt; obstacleGridColSize ; j++)</div><div class="line">            p[i][j] = obstacleGrid[i][j] == <span class="number">1</span> ? <span class="number">0</span> : p[i<span class="number">-1</span>][j] + p[i][j<span class="number">-1</span>];  </div><div class="line">    </div><div class="line">    <span class="keyword">return</span> p[obstacleGridRowSize<span class="number">-1</span>][obstacleGridColSize<span class="number">-1</span>];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="64-Minimum-Path-Sum"><a href="#64-Minimum-Path-Sum" class="headerlink" title="[64] Minimum Path Sum"></a>[64] Minimum Path Sum</h2><h3 id="Description-amp-Example-6"><a href="#Description-amp-Example-6" class="headerlink" title="Description &amp; Example"></a>Description &amp; Example</h3><p>Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.</p>
+<p>Note: You can only move either down or right at any point in time.</p>
+<h3 id="Sub-problem-3"><a href="#Sub-problem-3" class="headerlink" title="Sub problem"></a>Sub problem</h3><p>同上两题，判断<code>m[i+1][j+1]</code>时，选择上方和左方cost比较小的值走就可以了。</p>
+<h3 id="Code-6"><a href="#Code-6" class="headerlink" title="Code"></a>Code</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">minPathSum</span><span class="params">(<span class="keyword">int</span>** grid, <span class="keyword">int</span> gridRowSize, <span class="keyword">int</span> gridColSize)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> p[gridRowSize][gridColSize];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; gridRowSize ; i++)</div><div class="line">        p[i][<span class="number">0</span>] = i &gt; <span class="number">0</span> ? p[i<span class="number">-1</span>][<span class="number">0</span>]+grid[i][<span class="number">0</span>] : grid[i][<span class="number">0</span>];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; gridColSize ; i++)</div><div class="line">        p[<span class="number">0</span>][i] = i &gt; <span class="number">0</span> ? p[<span class="number">0</span>][i<span class="number">-1</span>]+grid[<span class="number">0</span>][i] : grid[<span class="number">0</span>][i];</div><div class="line">       </div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span> ; i &lt; gridRowSize ; i++)</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span> ; j &lt; gridColSize ; j++)</div><div class="line">            p[i][j] = p[i<span class="number">-1</span>][j] &lt; p[i][j<span class="number">-1</span>] ? p[i<span class="number">-1</span>][j] + grid[i][j] : p[i][j<span class="number">-1</span>] + grid[i][j];</div><div class="line">        </div><div class="line">    <span class="keyword">return</span> p[gridRowSize<span class="number">-1</span>][gridColSize<span class="number">-1</span>];</div><div class="line">        </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="70-Climbing-Stairs"><a href="#70-Climbing-Stairs" class="headerlink" title="[70] Climbing Stairs"></a>[70] Climbing Stairs</h2><h3 id="Description-amp-Example-7"><a href="#Description-amp-Example-7" class="headerlink" title="Description &amp; Example"></a>Description &amp; Example</h3><p>You are climbing a stair case. It takes n steps to reach to the top.</p>
+<p>Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?</p>
+<p>Note: Given n will be a positive integer.</p>
+<h3 id="Sub-problem-4"><a href="#Sub-problem-4" class="headerlink" title="Sub problem"></a>Sub problem</h3><p>爬到第n级台阶（n&gt;2）有两种方法，第一种是先爬到n-2然后爬两步，第二种是先爬到n-1再爬一步。所以如果用<code>step[i]</code>表示爬到第i级台阶的方法，那么<code>step[i+2]=step[i]+step[i+1]</code>并且<code>step[1]=1 step[2] =2</code>。</p>
+<h3 id="Code-7"><a href="#Code-7" class="headerlink" title="Code"></a>Code</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">climbStairs</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span>)</div><div class="line">        <span class="keyword">return</span> n;</div><div class="line">    <span class="keyword">int</span> step[n+<span class="number">1</span>];</div><div class="line">    step[<span class="number">0</span>] = <span class="number">0</span>;</div><div class="line">    step[<span class="number">1</span>] = <span class="number">1</span>;</div><div class="line">    step[<span class="number">2</span>] = <span class="number">2</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">3</span> ; i &lt; n+<span class="number">1</span> ; i++)</div><div class="line">        step[i] = step[i<span class="number">-2</span>] + step[i<span class="number">-1</span>];</div><div class="line">    <span class="keyword">return</span> step[n];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+          
+            <a href="/tags/Dynamic-Programming/" rel="tag"># Dynamic Programming</a>
+          
+            <a href="/tags/C/" rel="tag"># C</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/06/LeetCode4-Median-of-Two-Sorted-Arrays/" rel="next" title="LeetCode4 Median of Two Sorted Arrays">
+                <i class="fa fa-chevron-left"></i> LeetCode4 Median of Two Sorted Arrays
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/15/LeetCode-Dynamic-Programming/"
+           data-title="LeetCode Dynamic Programming I" data-url="http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Cong" />
+          <p class="site-author-name" itemprop="name">Cong</p>
+          <p class="site-description motion-element" itemprop="description">The only thing I know is I know nothing.</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/i4never" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://music.163.com/#/user/home?id=88400567" target="_blank" title="Music">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Music
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://u.dajie.com/futsung" target="_blank" title="Resume">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Resume
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Dynamic-Programming"><span class="nav-number">1.</span> <span class="nav-text">Dynamic Programming</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solved-Problems"><span class="nav-number">2.</span> <span class="nav-text">Solved Problems</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#10-Regular-Expression-Matching"><span class="nav-number">2.1.</span> <span class="nav-text">[10] Regular Expression Matching</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Description-amp-Example"><span class="nav-number">2.1.1.</span> <span class="nav-text">Description & Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sub-Problem"><span class="nav-number">2.1.2.</span> <span class="nav-text">Sub Problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code"><span class="nav-number">2.1.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#44-Wildcard-Matching"><span class="nav-number">2.2.</span> <span class="nav-text">[44] Wildcard Matching</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Description-amp-Example-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">Description & Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sub-Problem-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">Sub Problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#32-Longest-Valid-Parentheses"><span class="nav-number">2.3.</span> <span class="nav-text">[32] Longest Valid Parentheses</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Description-amp-Example-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">Description & Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sub-Problem-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">Sub Problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#53-Maximum-Subarray"><span class="nav-number">2.4.</span> <span class="nav-text">[53] Maximum Subarray</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Description-amp-Example-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">Description & Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sub-problem"><span class="nav-number">2.4.2.</span> <span class="nav-text">Sub problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code-3"><span class="nav-number">2.4.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#62-Unique-Paths"><span class="nav-number">2.5.</span> <span class="nav-text">[62] Unique Paths</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Description-amp-Example-4"><span class="nav-number">2.5.1.</span> <span class="nav-text">Description & Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sub-problem-1"><span class="nav-number">2.5.2.</span> <span class="nav-text">Sub problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code-4"><span class="nav-number">2.5.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#63-Unique-Paths-II"><span class="nav-number">2.6.</span> <span class="nav-text">[63] Unique Paths II</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Description-amp-Example-5"><span class="nav-number">2.6.1.</span> <span class="nav-text">Description & Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sub-problem-2"><span class="nav-number">2.6.2.</span> <span class="nav-text">Sub problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code-5"><span class="nav-number">2.6.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#64-Minimum-Path-Sum"><span class="nav-number">2.7.</span> <span class="nav-text">[64] Minimum Path Sum</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Description-amp-Example-6"><span class="nav-number">2.7.1.</span> <span class="nav-text">Description & Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sub-problem-3"><span class="nav-number">2.7.2.</span> <span class="nav-text">Sub problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code-6"><span class="nav-number">2.7.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#70-Climbing-Stairs"><span class="nav-number">2.8.</span> <span class="nav-text">[70] Climbing Stairs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Description-amp-Example-7"><span class="nav-number">2.8.1.</span> <span class="nav-text">Description & Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sub-problem-4"><span class="nav-number">2.8.2.</span> <span class="nav-text">Sub problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code-7"><span class="nav-number">2.8.3.</span> <span class="nav-text">Code</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cong</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"futsung"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
