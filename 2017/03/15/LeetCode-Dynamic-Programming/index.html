@@ -338,16 +338,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/03/15/LeetCode-Dynamic-Programming/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/15/LeetCode-Dynamic-Programming/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -452,8 +442,7 @@
 <p>Note: Given n will be a positive integer.</p>
 <h3 id="Sub-problem-4"><a href="#Sub-problem-4" class="headerlink" title="Sub problem"></a>Sub problem</h3><p>爬到第n级台阶（n&gt;2）有两种方法，第一种是先爬到n-2然后爬两步，第二种是先爬到n-1再爬一步。所以如果用<code>step[i]</code>表示爬到第i级台阶的方法，那么<code>step[i+2]=step[i]+step[i+1]</code>并且<code>step[1]=1 step[2] =2</code>。</p>
 <h3 id="Code-7"><a href="#Code-7" class="headerlink" title="Code"></a>Code</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">climbStairs</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (n == <span class="number">1</span> || n == <span class="number">2</span>)</div><div class="line">        <span class="keyword">return</span> n;</div><div class="line">    <span class="keyword">int</span> step[n+<span class="number">1</span>];</div><div class="line">    step[<span class="number">0</span>] = <span class="number">0</span>;</div><div class="line">    step[<span class="number">1</span>] = <span class="number">1</span>;</div><div class="line">    step[<span class="number">2</span>] = <span class="number">2</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">3</span> ; i &lt; n+<span class="number">1</span> ; i++)</div><div class="line">        step[i] = step[i<span class="number">-2</span>] + step[i<span class="number">-1</span>];</div><div class="line">    <span class="keyword">return</span> step[n];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><strong>本文作者：</strong> Cong<br><strong>本文链接：</strong>  <a href="http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/">http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/</a><br><strong>版权声明：</strong> 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/" target="_blank" rel="external">CC BY-NC-SA 3.0 CN</a> ​许可协议。转载请注明出处！</p>
-
+<div><ul class="post-copyright"><li class="post-copyright-author">       <strong>本文作者：</strong>Cong</li><li class="post-copyright-link">       <strong>本文链接：</strong><a href="http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/">http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/</a></li>       <li class="post-copyright-license"><strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/" target="_blank" rel="external">CC BY-NC-SA 3.0 CN</a> ​许可协议。转载请注明出处！</li></ul></div>
       
     </div>
 
@@ -526,10 +515,6 @@
 
           
   <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2017/03/15/LeetCode-Dynamic-Programming/"
-           data-title="LeetCode Dynamic Programming I" data-url="http://futsung.cn/2017/03/15/LeetCode-Dynamic-Programming/">
-      </div>
     
   </div>
 
@@ -798,35 +783,20 @@
 
   
 
-  
-    
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"futsung"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
+	
 
 
+
+
+
+  
 
 
 
