@@ -25,3 +25,12 @@ d="`date +%Y-%m-%d-%H:%M:%S`"
 git add .
 git commit -m $d
 git push origin hexo
+
+echo -e "\033[31m===========================================\033[0m"
+echo "The following files bs been uploaded:"
+echo -e "       \033[32m./themes\033[0m"
+echo -e "       \033[32m_config.yml\033[0m"
+echo -e "       \033[32m./source\033[0m"
+echo -e "       \033[32mpackage.json\033[0m"
+echo -e "       \033[32mbackup.sh\033[0m"
+echo -e "\033[31m===========================================\033[0m"
