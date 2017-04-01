@@ -1,0 +1,24 @@
+---
+title: Resources
+date: 2017-02-21 13:59:55
+comments: false
+---
+
+# Some useful resources
+
+## Python
+清华：https://pypi.tuna.tsinghua.edu.cn/simple
+
+阿里云：http://mirrors.aliyun.com/pypi/simple/
+
+中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/
+
+华中理工大学：http://pypi.hustunique.com/
+
+山东理工大学：http://pypi.sdutlinux.org/ 
+
+豆瓣：http://pypi.douban.com/simple/
+
+For temp use: ``pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pyspider``
+
+HTTPS are recomanded.
