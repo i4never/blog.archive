@@ -60,7 +60,7 @@ categories: [Others]
  3. 进入刚才clone的库，切换到新分支上``git checkout hexo``
  4. 把分支上原来的文件都删掉``rm -rf *``
  5. 运行下面的脚本，该脚本会备份``themes/ _config.yml source/ package.json``以及备份脚本自己``backup.sh``
-```shell
+```sh
 #/bin/bash
 
 echo -e "\033[31m===========================================\033[0m" 
