@@ -1,7 +1,6 @@
 {% if theme.wangyi_productKey %}
   {% set wangyi_productKey = theme.wangyi_productKey %}
   {% if page.comments %}
-
     <script type="text/javascript">
       var cloudTieConfig = {
       url: document.location.href, 

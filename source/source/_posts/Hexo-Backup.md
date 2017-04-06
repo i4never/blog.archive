@@ -1,7 +1,7 @@
 ---
 title: Hexo Backup
 date: 2017-04-01 11:41:43
-tags: [Shell, Git]
+tags: [Shell, Git, Hexo]
 categories: [Others]
 ---
 
