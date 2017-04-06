@@ -11,6 +11,8 @@
            data-width="{{ theme.facebook_comments_plugin.width }}"
            data-colorscheme="{{ theme.facebook_comments_plugin.scheme }}">
       </div>
+    {% elseif theme.wangyi_productKey %}
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
     {% elseif theme.disqus_shortname %}
       <div id="disqus_thread">
         <noscript>
