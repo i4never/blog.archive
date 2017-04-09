@@ -12,7 +12,7 @@ echo -e "\033[31m===========================================\033[0m"
 
 echo -e "Change branch to \"hexo\""
 cd i4never.github.io
-# git checkout hexo
+git checkout hexo
 
 cp -r ../themes ./themes
 cp ../_config.yml ./_config.yml
@@ -25,6 +25,7 @@ d="`date +%Y-%m-%d-%H:%M:%S`"
 git add .
 git commit -m $d
 git push origin hexo
+git checkout master
 
 echo -e "\033[31m===========================================\033[0m"
 echo "The following files bs been uploaded:"
