@@ -106,11 +106,12 @@ $$
 其中$s\_i$表示i时刻状态，$a\_i$表示i时刻Agent采取的动作，$r\_{i+1}$表示执行了动作后立即获得回报。这个序列最终以$s\_n$结束，例如游戏中出现Gameover或者Win。
 
 ### Policy
-MDP中的关键之一是Agent的Policy，Policy体现了Agent为了获得更大的回报而做出的动作。Policy定义为Agent的action与state的条件分布，也就是在某个state s下，agent做出某个action a的可能（例如state是离上班还有30分钟，90%的可能选择打车，10%的可能选择坐地铁）：
+MDP中的关键之一是Agent的Policy，Policy体现了Agent为了获得更大的回报而做出的动作。Policy定义为Agent的action与state的条件分布，也就是在某个state s下，agent做出某个action a的可能（例如state是离上班还有30分钟，90%的可能选择打车，90%的概率不会迟到，10%的可能选择坐地铁，10%的概率不会迟到）：
 
 $$
 \pi(a|s)=P(A\_t=a|S\_t=s)
 $$
+在MDP中，Agent的策略仅仅依靠当前状态，而与当前状态之前的历史状态无关。
 
 ### Discounted Reward
 我们把Episode中的reward都挑出来，每一步action后的回报组成了这样一个序列：
@@ -147,12 +148,42 @@ $$
 
 
 
-### State Value
-有了$G\_t$还不够，$G\_t$只能评估某个episode中某一时刻的action带来的收益，我们希望能够评估某个状态的价值，这样Agent就可以通过action主动向高价值状态转移。state value定义为回报的期望：
+### State Value(Bellman Equation)
+有了$G\_t$还不够，$G\_t$只能评估某个episode中某一时刻的action带来的收益，我们希望能够评估某个状态的价值，这样Agent就可以通过action主动向高价值状态转移。State Value定义为Agent处于某个state s下，遵循某个policy所获得的未来回报的期望：
+$$
+v\_{\pi}(s)=E\_{\pi}[G\_t|S\_t=s]
+$$
 
+这个公式可以做如下展开：
 $$
-v(s)=E[G\_t|S\_t=s]
+\begin{align}
+v\_{\pi}(s) & =E\_{\pi}[G\_t|S\_t=s] \\\\
+& = E\_{\pi}[r\_{t+1}+{\gamma}r\_{t+2}+{\gamma}^2 r\_{t+3}...|S\_t=s]\\\\
+& = E\_{\pi}[r\_{t+1}+{\gamma}(r\_{t+2}+{\gamma} r\_{t+3}...)|S\_t=s]\\\\
+& = E\_{\pi}[r\_{t+1}+{\gamma}G\_{t+1}))|S\_t=s]\\\\
+& = E\_{\pi}[r\_{t+1}+{\gamma}v\_{\pi}(s\_{t+1}))|S\_t=s]\\\\
+\end{align}
 $$
+也就是：
+$$
+v\_{\pi}(s) = R\_s+{\gamma}\sum\_{s' \in S} P\_{ss'}v(s')
+$$
+这意味着，状态价值是由两部分组成的，一部分是immediate reward，另一部分是未来的discounted reward。这就是所谓的Bellman方程，这个方程使状态价值的迭代计算成为可能。
+
+### Action Value
+与State Value相似，我们也可以根据Agent的Policy定义它Action Value。通过Action Value，我们希望可以评估在某个状态下，采取哪个action获得的期望收益最高。优化State Value与Action Value是Reinforcemnt Learning的两个主要思路，也就是所谓的值优化与策略优化。
+Action Value定义为处于某个state s下，根据某个policy选择动作a所能获得的未来回报的期望：
+$$
+q\_{\pi}(s,a)=E\_{\pi}[G\_t|S\_t=s, A\_t=a]
+$$
+参考Bellman方程，Action Value也能被分解成相似形式，从而进行迭代计算：
+$$
+q\_{\pi}(s,a)=E\_{\pi}[r\_{t+1}+{\gamma}q\_{\pi}(s\_{t+1}, a\_{t+1})|S\_t=s, A\_t=a]
+$$
+
+
+
+
 
 
 
