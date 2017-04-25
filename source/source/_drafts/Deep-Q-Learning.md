@@ -135,9 +135,7 @@ $$
 回到[Markov Process](#Markov-Process)这一节中提到的状态图和序列，如果每个状态的reward如下：
 {%asset_img markov_reward.png Markov state with Reward%}
 如果衰减系数为0.5，那么这样计算：
-
 $$
-P=
 \begin{array}{c|c}
 Episode & Discounted Reward\\\\
 \hline
@@ -146,9 +144,7 @@ C1FBFBC1C2Sleep & -2-\frac{1}{2}\*1-\frac{1}{4}\*1-\frac{1}{8}\*2-\frac{1}{16}\*
 \end{array}
 $$
 
-
-
-### State Value(Bellman Equation)
+### State Value(Bellman (Optimality) Equation)
 有了$G\_t$还不够，$G\_t$只能评估某个episode中某一时刻的action带来的收益，我们希望能够评估某个状态的价值，这样Agent就可以通过action主动向高价值状态转移。State Value定义为Agent处于某个state s下，遵循某个policy所获得的未来回报的期望：
 $$
 v\_{\pi}(s)=E\_{\pi}[G\_t|S\_t=s]
@@ -168,7 +164,10 @@ $$
 $$
 v\_{\pi}(s) = R\_s+{\gamma}\sum\_{s' \in S} P\_{ss'}v(s')
 $$
-这意味着，状态价值是由两部分组成的，一部分是immediate reward，另一部分是未来的discounted reward。这就是所谓的Bellman方程，这个方程使状态价值的迭代计算成为可能。
+这意味着，状态价值是由两部分组成的，一部分是immediate reward，另一部分是未来的discounted reward。这就是Bellman方程，这个方程使状态价值的迭代计算成为可能。相似地，我们可以定义最优Bellman方程（Bellman Optimality Equation）：
+$$
+v\_{\*\pi}(s) = {max}\_a(R\_s+{\gamma}\sum\_{s' \in S} P\_{ss'}v\_{\*\pi}(s'))
+$$
 
 ### Action Value
 与State Value相似，我们也可以根据Agent的Policy定义它Action Value。通过Action Value，我们希望可以评估在某个状态下，采取哪个action获得的期望收益最高。优化State Value与Action Value是Reinforcemnt Learning的两个主要思路，也就是所谓的值优化与策略优化。
@@ -180,6 +179,52 @@ $$
 $$
 q\_{\pi}(s,a)=E\_{\pi}[r\_{t+1}+{\gamma}q\_{\pi}(s\_{t+1}, a\_{t+1})|S\_t=s, A\_t=a]
 $$
+相似地可以定义最优action value：
+$$
+q\_{\pi}(s,a)=max(E\_{\pi}[r\_{t+1}+{\gamma}q\_{\pi}(s\_{t+1}, a\_{t+1})|S\_t=s, A\_t=a])
+$$
+
+## Theorem
+对于MDP，有这样的理论：
+ 1. 存在一个最优策略$\pi$，这个策略不差于其他任何策略。
+ 2. 遵循最优策略，计算出的state value是最优的。
+ 3. 遵循最优策略，计算出的action value是最优的。
+
+Agent的目的就是找到这个最优策略。
+
+# Learning Algorithm
+有了上面这些理论基础，下面就需要讨论实现Agent学习的算法。RL问题中，Agent的目标是未来能够获得最大的收益。基于上述State Value与Action Value的定义，分别有Policy Iteration与Value Iteration等等的算法。这里先简述这两种算法及其缺陷进而引出Q-Learning与神经网络。
+
+## Policy Iteration
+Policy Iteration是基于Bellman方程的：
+$$
+\begin{align}
+v\_{\pi}(s) &= R\_s+{\gamma}\sum\_{s' \in S} P\_{ss'}v(s')\\\\
+&=\sum\_{a}\pi(a|s)\sum\_{s',r}p(s',r|s,a)[r+\gamma v\_k(s')]
+\end{align}
+$$
+Policy Iteration分为两步：
+ 1. Policy Evaluation，目的是根据当前策略，计算一个episode的Value，也就是基于当前策略的价值
+ 2. Policy Improvement，使用根据第一步中计算出的Value，更新策略，每次都选择Value更大方向来更新。
+
+{%asset_img policy_alg.png Policy Iteration%}
+
+## Value Iteration
+Value Iteration是基于最优Bellman方程的：
+$$
+\begin{align}
+v\_{\*\pi}(s) &= {max}\_a(R\_s+{\gamma}\sum\_{s' \in S} P\_{ss'}v\_{\*\pi}(s')) \\\\
+&={max}\_a \sum\_{s',r}p(s',r|s,a)[r+\gamma v\_{\*}(s')]
+\end{align}
+$$
+算法如下：
+{%asset_img value_iteration.png Value Iteration%}
+
+上述两个算法明显的缺陷是需要对问题有充分的了解，也就是要知道状态转移矩阵$p$，在许多问题中这是不现实的。此外，虽然这两个算法的收敛性都得到了证明，但是时间复杂度高，需要施加许多优化才能解决收敛速度慢的问题。为此，有了蒙特卡洛方法，TD方法，Q-Learning等等的改进。这里着重关注Q-Learning。
+
+## Q-Learning
+Q-Learning的想法是源于Value Iteration的
+
 
 
 
