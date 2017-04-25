@@ -5,8 +5,8 @@ tags: [Machine Learning]
 categories: [Machine Learning]
 ---
 
-DeepMind开创新的论文《Human-level control through deep reinforcement learning》登上了15年的Nature封面，将传统的增强学习与神经网络结合后，相同架构可以学习如何玩七种不同的Atari游戏。DeepMind被Google收购后，该技术也被用于AlphaGo的开发。
-本文以openAI[开源库gym][1]中的"CartPole-v0"作为贯穿全文的example，其中也会穿插其他问题，试图展现Reinforcement Learning的理论基础以及其是如何与NN结合的。
+DeepMind开创新的论文《Human-level control through deep reinforcement learning》登上了15年的Nature封面，将传统的增强学习与神经网络结合后，相同架构可以学习如何玩七种不同的Atari游戏。DeepMind被Google收购后，DQN相关技术也被用于AlphaGo的开发。
+本文以openAI[开源库gym][1]中的"CartPole-v0"作为example，其中也会穿插其他示例，试图展现Reinforcement Learning的理论基础以及其是如何与NN结合的。
 "CartPole-v0"是一个小游戏，需要通过向左或者向右移动黑色块，使与块连接的棒处于平衡状态。
 {%asset_img cartpole_v0.png CartPole-v0%}
 
@@ -27,15 +27,15 @@ Environment:
  2. 因为接受Action而发生变化
  3. 反馈Reward
 
-Agent的目标是未来能够获得最大的回报。例如"CartPole-v0"中，Agent可以施加的动作只有两个：向左或者向右移动黑色块，Agent可以观察到的环境为块的位置，木棒与块的角度等等，而Reward的定义可以是如果游戏没有结束，Reward为1，否则为-1等等。在DeepMind论文中的模型输入，即Agent的Observation是游戏图像；输出，即Action为18个动作中的一种，Reward为获得的游戏分数。
+Agent的目标是未来能够获得最大的回报。例如"CartPole-v0"中，Agent可以施加的动作只有两个：向左或者向右移动黑色块，Agent可以观察到的环境为块的位置，木棒与块的角度等等，而Reward的定义可以是如果游戏没有结束，Reward为1，否则为-1等等。在DeepMind论文中的模型输入，即Agent的Observation是游戏图像；输出Action为18个动作中的一种，Reward为获得的游戏分数。
 
 {%asset_img atari.png ATARI%}
 
 其中有以下两点需要注意：
- 1. Agent希望获得的是“未来”的最大回报，这意味着为了将来能够获得更大的回报，Agent会牺牲眼前的利益。
+ 1. Agent希望获得的是“未来”的最大回报，这意味着为了将来能够获得更大的回报，聪明的Agent会牺牲眼前的利益。
  2. 每个Action所带来的回报可能是long-term的。这意味着在$t$时刻采取的动作，可能在很久之后的$t+k$时刻才带来回报。（例如做一个投资决策，可能几个月才能知道投资的回报）
 
-假设我们希望使用一个传统的神经网络去玩这个游戏，那么神经网络的输入应该是屏幕的图片，输出则应该是分为两个动作：向左、向右。这可以被看为是一种分类问题，我们需要对每一个游戏画面做出决定，是该往左移，还是往右。但是显而易见的，这样的监督训练需要数量非常大的样本。而增强学习不需要其他人无数次地告知碰到某个画面应该选择怎样的动作，需要的仅仅是做出动作后获得的反馈，就可以自己解决问题。
+假设我们希望使用一个传统的神经网络去玩这个游戏，我们的想法是这样的：神经网络的输入应该是屏幕的图片，输出则应该是分为两个动作：向左、向右。这可以被看为是一种分类问题，但是显而易见的，这样的监督训练需要数量非常大的样本。而RL则不需要其他人无数次地告知碰到某个画面应该做出怎样的动作，需要的仅仅是做出动作后获得的Reward，就可以自己解决问题。
 
 # Markov Model
 有了这样一个模型后，我们需要把模型公式化，才能进一步定义模型的学习方法。增强学习是基于Markov模型的。
@@ -61,8 +61,9 @@ Markov Process定义在二元组($S, P$)上，其中：
 
 $$
 P=
-\begin{array}{c lcr}
+\begin{array}{c|lcr}
 & C1 & C2 & C3 & Pass & Pub & FB & Sleep \\\\
+\hline
 C1 &  & 0.5 & & & & 0.5 &  \\\\
 C2 &  &  & 0.8 & & &  & 0.2 \\\\
 C3 &  &  &  & 0.6  & 0.4 & & \\\\
@@ -85,7 +86,7 @@ $$
 - C1 FB FB C1 C2 C3 Pub C1 FB FB FB C1 C2 C3 Pub C2 Sleep
 
 ## Markov Decision Process
-简单的Markov Process并没有体现出Agent的作用，Agent所处的状态仅由状态转移矩阵决定。因此，我们在模型中加入Action与Reward的概念，使Agent能够通过Action某种程度上决定自己所处的下一个状态，并且能够通过Reward评估所处状态的好坏。
+简单的Markov Process并没有体现出Agent的作用，Agent所处的状态仅由所处环境随机决定。因此，在MDP模型中加入了Action与Reward的概念，有了这两个概念，Agent能够通过Action某种程度上决定自己所处的下一个状态，并且能够通过Reward评估所处状态的好坏，进而使“学习”变为可能。
 MDP定义如下：
 MDP定义在五元组($S, P, A, R, \gamma$)上，其中：
  1. $S$是所有状态组成的有限集
@@ -96,21 +97,64 @@ MDP定义在五元组($S, P, A, R, \gamma$)上，其中：
  $R\_{s}^{a}＝E[R\_{t+1}|S\_t=s,A\_t=a]$
  5. $\gamma$是回报衰减因子，$\gamma\in[0,1]$
 
-在这个定义下，Agent所处的状态是由环境与自己共同决定的。比如明天有1％的概率会下雨，但是采取了人工降雨，从而明天下雨的概率达到了90%，转移到“下雨”这个状态的概率是由环境和Action共同决定的。值得考虑的是其中Reward函数与衰减因子。
+在这个定义下，Agent所处的状态是由环境与自己共同决定的。比如明天有1％的概率会下雨，但是采取了人工降雨，从而明天下雨的概率达到了90%，转移到“下雨”这个状态的概率是由环境和Action共同决定的。
 首先我们定义在MDP下的episode，用$a,r$分别表示Action与Reward，Agent与Environment的交互可以用这样一个有限状态序列表示：
 
 $$
 s\_0,a\_0,r\_1,s\_1,a\_1,r\_2...s\_{n-1},a\_{n-1},r\_n,s\_n
 $$
 其中$s\_i$表示i时刻状态，$a\_i$表示i时刻Agent采取的动作，$r\_{i+1}$表示执行了动作后立即获得回报。这个序列最终以$s\_n$结束，例如游戏中出现Gameover或者Win。
-我们把其中的reward都挑出来，每一步action后的回报组成了这样一个序列：
+
+### Policy
+MDP中的关键之一是Agent的Policy，Policy体现了Agent为了获得更大的回报而做出的动作。Policy定义为Agent的action与state的条件分布，也就是在某个state s下，agent做出某个action a的可能（例如state是离上班还有30分钟，90%的可能选择打车，10%的可能选择坐地铁）：
+
+$$
+\pi(a|s)=P(A\_t=a|S\_t=s)
+$$
+
+### Discounted Reward
+我们把Episode中的reward都挑出来，每一步action后的回报组成了这样一个序列：
 
 $$
 r\_1,r\_2...r\_n
 $$
-在$t$时刻，
+对于一个episode，可以计算出整个过程中获得的Reward：$\sum\_{i=1}^{n} r\_i$；其中的某一时刻$t$之后的Reward为$\sum\_{i=t+1}^{n} r\_i$。加上衰减系数，$t$时刻起获得的total discounted reward定义为：
 
+$$
+G\_t=r\_{t+1}+{\gamma}r\_{t+2}+{\gamma}^2 r\_{t+3}...=\sum\_{k=0}^n {\gamma}^k r\_{t+k+1}
+$$
+这个公式的观点是在$t$时刻作出的动作，经过的时间越长，因为这个动作带来的回报就越小。如果$\gamma=0$，那么这个Agent比较目光短浅，相反如果$\gamma=1$，那么这个Agent太“深谋远虑”，在大部分情况下这两种情况都不是一个好的选择。
+根据UCL David Silver[课程][2]中所述，加入衰减系数$\gamma$是由于以下几个原因：
+ 1. 数学上更加方便计算。（？？？）
+ 2. 如果一个episode中存在无限循环的话（C1 C2 C3 C1 C2 C3...），可以避免出现无限大的reward。
+ 3. 环境是随机的，即时在同一个state下做了与上次一样的action，带来的回报是不同的。
+ 4. 在某些情况下，我们更关注动作带来的近期回报。（例如短期投资）
+ 5. 如果所有episode都是有限的，有时候也会使$\gamma＝1$。
+
+回到[Markov Process](#Markov-Process)这一节中提到的状态图和序列，如果每个状态的reward如下：
+{%asset_img markov_reward.png Markov state with Reward%}
+如果衰减系数为0.5，那么这样计算：
+
+$$
+P=
+\begin{array}{c|c}
+Episode & Discounted Reward\\\\
+\hline
+C1 C2 C3 Pass Sleep & -2-\frac{1}{2}\*2-\frac{1}{4}\*2+\frac{1}{8}\*10=-2.25\\\\
+C1FBFBC1C2Sleep & -2-\frac{1}{2}\*1-\frac{1}{4}\*1-\frac{1}{8}\*2-\frac{1}{16}\*2=-3.125\\\\
+\end{array}
+$$
+
+
+
+### State Value
+有了$G\_t$还不够，$G\_t$只能评估某个episode中某一时刻的action带来的收益，我们希望能够评估某个状态的价值，这样Agent就可以通过action主动向高价值状态转移。state value定义为回报的期望：
+
+$$
+v(s)=E[G\_t|S\_t=s]
+$$
 
 
 
 [1]: https://github.com/openai/gym
+[2]: http://www0.cs.ucl.ac.uk/staff/D.Silver/web/Teaching_files/MDP.pdf
