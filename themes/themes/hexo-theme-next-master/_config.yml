@@ -137,7 +137,8 @@ social:
   #LinkLabel: Link
   GitHub: https://github.com/i4never
   Music: http://music.163.com/#/user/home?id=88400567
-  Resume: https://github.com/i4never/i4never.github.io/blob/master/resume.pdf
+  # Resume: https://github.com/i4never/i4never.github.io/blob/master/resume.pdf
+  Resume : /appendix/resume.pdf
 
 
 # Social Links Icons
