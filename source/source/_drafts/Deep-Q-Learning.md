@@ -27,7 +27,7 @@ Environment:
  2. 因为接受Action而发生变化
  3. 反馈Reward
 
-Agent的目标是未来能够获得最大的回报。例如"CartPole-v0"中，Agent可以施加的动作只有两个：向左或者向右移动黑色块，Agent可以观察到的环境为块的位置，木棒与块的角度等等，而Reward的定义可以是如果游戏没有结束，Reward为1，否则为-1等等。在DeepMind论文中的模型输入，即Agent的Observation是游戏图像；输出Action为18个动作中的一种，Reward为获得的游戏分数。
+Agent的目标是未来能够获得最大的回报。例如"CartPole-v1"中，Agent可以施加的动作只有两个：向左或者向右移动黑色块，Agent可以观察到的环境为块的位置，木棒与块的角度等等，而Reward的定义可以是如果游戏没有结束，Reward为1，否则为-1等等。在DeepMind论文中的模型输入，即Agent的Observation是游戏图像；输出Action为18个动作中的一种，Reward为获得的游戏分数。
 
 {%asset_img atari.png ATARI%}
 
@@ -223,10 +223,204 @@ $$
 上述两个算法明显的缺陷是需要对问题有充分的了解，也就是要知道状态转移矩阵$p$，在许多问题中这是不现实的。此外，虽然这两个算法的收敛性都得到了证明，但是时间复杂度高，需要施加许多优化才能解决收敛速度慢的问题。为此，有了蒙特卡洛方法，TD方法，Q-Learning等等的改进。这里着重关注Q-Learning。
 
 ## Q-Learning
+上述两种算法都需要知道model的状态转移概率，适用范围因此受到了很大限制，因此有了Q-Learning算法。
+Q-Learning是基于这样一个想法，存在一个函数$Q(s,a)$，输入为当前所处状态state与动作a，输出是在序列结束时能够获取的最大的Reward值。如果能够估算出这样一个函数，那么Agent做决策就变得非常简单，观察一下当前状态state以及每个合法的动作a，放进这个函数算一算，做返回值最大的那个动作就可以了。传统的Q-Learning用这样一张表来代表Q函数：每一行代表一个state，每一列代表一个action，相应位置代表函数值，计算方法如下：
+{%asset_img q_learning.png Q-Learning%}
+有相应理论证明算法收敛，这张表格会慢慢接近真实值。
+但是，我们处理的许多问题，状态多到不计其数，而且对于每个状态，并不是所有动作都是合法的。这就造成了这张表规模十分大，并且十分稀疏，这就是传统Q-Learning算法的缺陷。
 
-## to be continued
+## Deep Q-Learning
+我们都知道网络对于函数的拟合有非常好的效果，Deep Q-Learning的想法就是用一个网络代替上面所说的表来拟合Q函数。对网络做一次前向通过就可以获得估计值，于传统Q-Learning便利下一状态所有Q值一样，将下一个状态以及所有可能的动作做一次前向通过，作为“真实值”，然后反向传播误差，具体算法如下：
+{%asset_img deep_q_learning.png Deep Q-Learning%}
+与Q-Learning唯一的不同就是用net而不是表去估计Q函数，因而表达能力大大提升。
+
+# Experinment
+试验用的是提到的“CartPole-v1”这个例子，Agent可以观测到块的位置，速度以及棒的偏转角度，角速度四个参数，如果棒子偏离竖直方向大于15度就会失败，可以做的操作是向左或者向右推木块，如果下一个step没有失败，reward为1。建立一个20个节点的经典三层网络，经过1500eposide左右的训练就有非常好的稳定效果。
+```python
+import gym
+import tensorflow as tf
+import numpy as np
+import random
+from collections import deque
+
+# Hyper Parameters for DQN
+GAMMA = 0.9 # discount factor for target Q
+INITIAL_EPSILON = 0.5 # starting value of epsilon
+FINAL_EPSILON = 0.01 # final value of epsilon
+REPLAY_SIZE = 10000 # experience replay buffer size
+BATCH_SIZE = 32 # size of minibatch
+
+class DQN():
+  def __init__(self, env):
+    # init experience replay
+    self.replay_buffer = deque()
+    # init some parameters
+    self.time_step = 0
+    self.epsilon = INITIAL_EPSILON
+    self.state_dim = env.observation_space.shape[0]
+    self.action_dim = env.action_space.n
+
+    self.create_Q_network()
+    self.create_training_method()
+
+    self.merged = tf.summary.merge_all()
 
 
+    # Init session
+    self.session = tf.InteractiveSession()
+    self.session.run(tf.initialize_all_variables())
+    self.train_writer = tf.summary.FileWriter("train_log/", self.session.graph)
+
+  def create_Q_network(self):
+    # network weights
+    W1 = self.weight_variable([self.state_dim,20])
+    # print("****************"+str(self.state_dim))
+    b1 = self.bias_variable([20])
+    W2 = self.weight_variable([20,self.action_dim])
+    b2 = self.bias_variable([self.action_dim])
+    # input layer
+    self.state_input = tf.placeholder("float",[None,self.state_dim])
+    # hidden layers
+    h_layer = tf.nn.relu(tf.matmul(self.state_input,W1) + b1)
+    # Q Value layer
+    self.Q_value = tf.matmul(h_layer,W2) + b2
+
+  def create_training_method(self):
+    self.action_input = tf.placeholder("float",[None,self.action_dim]) # one hot presentation
+    self.y_input = tf.placeholder("float",[None])
+    Q_action = tf.reduce_sum(tf.multiply(self.Q_value,self.action_input),reduction_indices = 1)
+    self.cost = tf.reduce_mean(tf.square(self.y_input - Q_action))
+    # tf.summary.histogram('cost', self.cost)
+    tf.summary.scalar('cost', self.cost)
+    self.optimizer = tf.train.AdamOptimizer(0.0001).minimize(self.cost)
+
+  def perceive(self,state,action,reward,next_state,done,count):
+    one_hot_action = np.zeros(self.action_dim)
+    one_hot_action[action] = 1
+    self.replay_buffer.append((state,one_hot_action,reward,next_state,done))
+    if len(self.replay_buffer) > REPLAY_SIZE:
+      self.replay_buffer.popleft()
+
+    if len(self.replay_buffer) > BATCH_SIZE:
+      self.train_Q_network(count)
+
+
+  def train_Q_network(self, count):
+    self.time_step += 1
+    # Step 1: obtain random minibatch from replay memory
+    minibatch = random.sample(self.replay_buffer,BATCH_SIZE)
+    state_batch = [data[0] for data in minibatch]
+    action_batch = [data[1] for data in minibatch]
+    reward_batch = [data[2] for data in minibatch]
+    next_state_batch = [data[3] for data in minibatch]
+
+    # Step 2: calculate y
+    y_batch = []
+    Q_value_batch = self.Q_value.eval(feed_dict={self.state_input:next_state_batch})
+    for i in range(0,BATCH_SIZE):
+      done = minibatch[i][4]
+      if done:
+        y_batch.append(reward_batch[i])
+      else :
+        y_batch.append(reward_batch[i] + GAMMA * np.max(Q_value_batch[i]))
+
+    if count%50 == 0:
+      data, _ = self.session.run([self.merged, self.optimizer], feed_dict={
+        self.y_input:y_batch,
+        self.action_input:action_batch,
+        self.state_input:state_batch
+        })
+      self.train_writer.add_summary(data, count) 
+    else:
+      self.optimizer.run(feed_dict={
+        self.y_input:y_batch,
+        self.action_input:action_batch,
+        self.state_input:state_batch
+      })
+
+  def egreedy_action(self,state):
+    Q_value = self.Q_value.eval(feed_dict = {
+      self.state_input:[state]
+      })[0]
+    if random.random() <= self.epsilon:
+      return random.randint(0,self.action_dim - 1)
+    else:
+      return np.argmax(Q_value)
+
+    self.epsilon -= (INITIAL_EPSILON - FINAL_EPSILON)/10000
+
+  def action(self,state):
+    return np.argmax(self.Q_value.eval(feed_dict = {
+      self.state_input:[state]
+      })[0])
+
+  def weight_variable(self,shape):
+    initial = tf.truncated_normal(shape)
+    return tf.Variable(initial)
+
+  def bias_variable(self,shape):
+    initial = tf.constant(0.01, shape = shape)
+    return tf.Variable(initial)
+
+
+
+# ---------------------------------------------------------
+# Hyper Parameters
+ENV_NAME = 'CartPole-v1'
+# ENV_NAME = 'MountainCar-v0'
+EPISODE = 10000 # Episode limitation
+STEP = 1000 # Step limitation in an episode
+TEST = 10 # The number of experiment test every 100 episode
+
+def main():
+  # initialize OpenAI Gym env and dqn agent
+  env = gym.make(ENV_NAME)
+  agent = DQN(env)
+  for episode in range(EPISODE):
+    # initialize task
+    state = env.reset()
+    # Train
+    for step in range(STEP):
+      action = agent.egreedy_action(state) # e-greedy action for train
+      next_state,reward,done,_ = env.step(action)
+      # Define reward for agent
+      reward_agent = -1 if done else 0.1
+      agent.perceive(state,action,reward,next_state,done,episode)
+      state = next_state
+      if done:
+        break
+    # Test every 100 episodes
+    if episode % 100 == 0:
+      total_reward = 0
+      for i in range(TEST):
+        state = env.reset()
+        for j in range(STEP):
+          env.render()
+          action = agent.action(state) # direct action for test
+          state,reward,done,_ = env.step(action)
+          total_reward += reward
+          if done:
+            break
+      ave_reward = total_reward/TEST
+      print ('episode: '+str(episode)+' Evaluation Average Reward:'+str(ave_reward))
+      if ave_reward >= 1000:
+        break
+
+  env.reset()
+  done = False
+  count = 0
+  while done != True:
+    env.render()
+    action = agent.action(state)
+    s, r, done, _ = env.step(action)
+    print("Step: "+str(count))
+    count = count+1
+
+main()
+```
+
+loss变化：
+{%asset_img loss.png LOSS%}
 
 
 
