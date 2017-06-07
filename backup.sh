@@ -28,7 +28,7 @@ git push origin hexo
 git checkout master
 
 echo -e "\033[31m===========================================\033[0m"
-echo "The following files bs been uploaded:"
+echo "The following files has been uploaded:"
 echo -e "       \033[32m./themes\033[0m"
 echo -e "       \033[32m_config.yml\033[0m"
 echo -e "       \033[32m./source\033[0m"
