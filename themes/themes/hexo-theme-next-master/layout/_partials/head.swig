@@ -78,6 +78,16 @@
   })
 }}
 
+<script>
+    (function(){
+        if('{{ page.password }}'){
+            if (prompt('Please enter the password of this article.'+'\nHint: '+'{{page.hint}}') !== '{{ page.password }}'){
+                alert('Invalid PD！');
+                history.back();
+            }
+        }
+    })();
+</script>
 
 {# Export some HEXO Configurations to Front-End #}
 <script type="text/javascript" id="hexo.configurations">
