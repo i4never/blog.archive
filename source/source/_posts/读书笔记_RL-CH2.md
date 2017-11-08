@@ -4,10 +4,12 @@ date: 2017-11-07 15:55:00
 tags: [Reinforcement Learning, 读书笔记]
 categories: 读书笔记
 ---
-
-## 多臂赌博机(A k-armed Bandit Problem)
+[The book is here][1]
+## 多臂赌博机(A k-armed Bandit Problem
 
 一个赌徒，要去摇老虎机，走进赌场一看，一排k个老虎机，外表一模一样，但是每个老虎机吐钱的概率不同，他不知道每个老虎机吐钱的概率分布是什么，每个选择之后都会收到一个数字化的收益。赌徒的任务是在固定的次数，比如说选择100次，每次选择按下哪k个老虎机按钮的情况下，最大化收益。
+
+{%asset_img k_armed.jpg k-armed bandit%}
 
 在k臂赌博机问题中，每个动作（拉下k中的哪几个手柄）都会有一个期望收益。我们把$t$时间的选择的动作记作 $A\_t$ ，相应的收益记作$R\_t$，那么动作$a$的期望受益就可以写作：
 $$
@@ -91,3 +93,5 @@ $$
 第一个条件保证了大量迭代后消除初值或者收益的波动的影响；第二个条件保证了收敛。
 
 当步长为常数时，显然不满足第二个条件，对收益的估计不会收敛，而是根据近期值不停地改变（这对于非平稳问题是有利的）。**在理论研究中经常选择能够收敛的步长，然而在应用中却不这样。**
+
+[1]: https://github.com/i4never/i4never.github.io/blob/master/appendix/reinforcement_learning_an_introduction.pdf
