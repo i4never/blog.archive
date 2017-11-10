@@ -34,13 +34,17 @@ $$
 
 ### $\varepsilon$-greedy action selection
 
-在基于动作的方法中，$\varepsilon$-greedy是常用的方法。简单的说，就是在每次选择动作时，已$(1-\varepsilon)$的概率选择期望收益最大的动作（即$A\_t={argmax}\_aQ\_t(a)$），以$\varepsilon$的概率随机选择动作。
+在基于动作的方法中，$\varepsilon$-greedy是常用的方法。简单的说，就是在每次选择动作时，已$(1-\varepsilon)$的概率选择期望收益最大的动作（即$A\_t={argmax}\_aQ\_t(a)$），以$\varepsilon$的概率随机选择动作。$\varepsilon-greedy$在Q-Learning等等算法中都有用到，一般不会是一个固定的值，而是随着迭代次数的的增大而减小，即在迭代开始的时候鼓励“Exploring”，随着迭代次数变多鼓励“Exploiting”。
 
 ## 2.3 The 10-armed Testbed
 
 $\varepsilon$的大小，选择的效果取决于不同的task。比如收益分布有着很大的方差，noisier也很严重，比较大的$\varepsilon$值比较好；反之收益分布的方差接近0，$\varepsilon＝0$，也就是所谓的greedy选择比较好。
 书上用了这样一个Testbed：生成10个服从均值为0，方差为1的正态分布的随机数，这10个随机数作为均值，方差为1，获得10个分布，把这10个分布作为10台赌博机的reward分布。1000次迭代，分别选取$\varepsilon=0, 0.01, 0.1$。上述实验重复2000次，计算每一步的平均收益：
 {% asset_image 2_3.png result%}
+不妨在试试更大的$\varepsilon$
+{% asset_image 2_3_5v.png different $\varepsilon$%}
+$\varepsilon＝0$会导致陷入局部最优，太小的$\varepsilon$会导致收敛速度变慢，从下图中可以看到，迭代3000次后0.01才收敛：
+{% asset_image 2_3_3000.png different 收敛速度比较%}
 
 ```python
 import matplotlib.pyplot as plt
