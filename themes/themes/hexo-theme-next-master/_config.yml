@@ -290,14 +290,14 @@ wangyi_productKey: b61ff64eabd64e0a8e3579d71cbe8378
 # Available value:
 #    button | slide
 # Warning: Baidu Share does not support https.
-#baidushare:
-##  type: button
+baidushare:
+ type: button
 
 # Share
 #jiathis:
 # Warning: JiaThis does not support https.
 #add_this_id:
-jiathis: true
+# jiathis: true
 
 # Share
 #duoshuo_share: true
