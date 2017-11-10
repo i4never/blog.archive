@@ -297,6 +297,7 @@ wangyi_productKey: b61ff64eabd64e0a8e3579d71cbe8378
 #jiathis:
 # Warning: JiaThis does not support https.
 #add_this_id:
+jiathis: true
 
 # Share
 #duoshuo_share: true
