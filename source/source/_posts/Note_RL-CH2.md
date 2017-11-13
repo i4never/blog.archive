@@ -103,6 +103,7 @@ plt.show()
 ```
 
 ## 2.4 增量计算(Incremental Implementation)
+增量计算是为了方便编程提出的，其实就是期望收益计算的变形。
 
 把$Q\_n(a)$记作动作$a$被选择$n$次之后的动作价值的估计：
 $$
@@ -161,5 +162,7 @@ $$
 目前为止讨论的方法都与初始值$Q\_1(a)​$有关，在统计学上，所有的方法都被出示估计“偏置”了。对于“sample-average”（$StepSize=\frac{1}{N(A)}​$），所有的动作至少选择一遍后偏置消失，但对于常数$StepSize​$，即使随着时间步减小，偏置的影响始终存在。
 
 偏置存在的缺点在于初始值成了模型的参数，需要人为挑选；优点在于可以计算时向模型提供一些先验知识。比如2.3中的问题，不使用0，使用＋5作为初值，对于均值为0方差为1的正态分布，＋5是一个非常乐观的值，在迭代初期，在尝试某个动作后，大概率发现收益不如预期(+5)，从而在下一次迭代时选择其他动作，所有的动作在开始的几次迭代中几乎肯定都会被选择一边，，这就变相在模型计算初期鼓励了exploring。
+
+Chapter3主要介绍Markov Decision Process，在{% post_link Deep-Q-Learning post%}中有介绍，下一篇Note主题是Chapter4的Dynamic Programming，主要是策略估计、策略迭代。
 
 [1]: https://github.com/i4never/i4never.github.io/raw/master/appendix/reinforcement_learning_an_introduction.pdf
