@@ -5,7 +5,7 @@ tags: [Machine Learning]
 categories: [Machine Learning]
 ---
 
-DeepMind开创新的论文《Human-level control through deep reinforcement learning》登上了15年的Nature封面，将传统的增强学习与神经网络结合后，相同架构可以学习如何玩七种不同的Atari游戏。DeepMind被Google收购后，DQN相关技术也被用于AlphaGo的开发。
+《Human-level control through deep reinforcement learning》By DeepMind登上了15年的Nature封面，将增强学习与神经网络结合后，训练后的agent可以掌握七种不同的Atari游戏。
 本文以openAI[开源库gym][1]中的"CartPole-v0"作为example，其中也会穿插其他示例，试图展现Reinforcement Learning的理论基础以及其是如何与NN结合的。
 "CartPole-v0"是一个小游戏，需要通过向左或者向右移动黑色块，使与块连接的棒处于平衡状态。
 {%asset_img cartpole_v0.png CartPole-v0%}

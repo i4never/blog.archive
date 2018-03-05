@@ -1,8 +1,8 @@
 ---
 title: Reading Note：RL-CH2 Multi-Armed Bandits
 date: 2017-11-07 15:55:00
-tags: [Reinforcement Learning, 读书笔记]
-categories: Reading Note
+tags: [Reinforcement Learning, 读书笔记, Machine Learning]
+categories: Machine Learning
 ---
 [Reinforcement Learning: An Introduction][1]
 在看论文中各种花式算法的同时，希望通过这本书对RL有个比较扎实的理解。雁过留声，每一章留下note，复现以下代码，供以后翻阅，也省的自己得过且过＝ ＝。
