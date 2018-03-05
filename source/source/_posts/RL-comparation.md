@@ -5,7 +5,7 @@ tags: [Reinforcement Learning, Machine Learning]
 categories: Machine Learning
 ---
 
-此blog持续更新，主要记录不同RL算法的主要特点，对于算法的描述并不完全。
+此blog持续更新，主要记录不同RL算法的主要特点。
 
 # 1. Q-Learning & SARSA
 Q-Learning以及SARSA是RL最基本的方法，不同之处在于Q-Learning在更新是使用最优值；而SARSA则根据自己现有的策略来计算更新用的Q值。这就导致了SARSA比较看重已有的经验，比起QL更加保守，因此容易陷入类似于“局部最优”的情况。而QL始终根据maxQ来更新Q值，比起SARSA更加“贪婪”。
