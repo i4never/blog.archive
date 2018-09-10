@@ -70,7 +70,7 @@ theme: hexo-theme-next-master
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/i4never/i4never.github.io.git
+  repo: git@github.com:i4never/i4never.github.io.git
   branch: master
 
 marked:
