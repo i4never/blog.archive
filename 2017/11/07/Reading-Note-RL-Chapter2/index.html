@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="多臂赌博机(A k-armed Bandit Problem)一个赌徒，要去摇老虎机，走进赌场一看，一排k个老虎机，外表一模一样，但是每个老虎机吐钱的概率不同，他不知道每个老虎机吐钱的概率分布是什么，每个选择之后都会收到一个数字化的收益。赌徒的任务是在固定的次数，比如说选择100次，每次选择按下哪k个老虎机按钮的情况下，最大化收益。 在k臂赌博机问题中，每个动作（拉下k中的哪几个手柄）都会有一个期">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RL-CH2 MULTI-ARMED BANDITS">
+<meta property="og:url" content="http://example.com/2017/11/07/Reading-Note-RL-Chapter2/index.html">
+<meta property="og:site_name" content="Cong&#39;s blog">
+<meta property="og:description" content="多臂赌博机(A k-armed Bandit Problem)一个赌徒，要去摇老虎机，走进赌场一看，一排k个老虎机，外表一模一样，但是每个老虎机吐钱的概率不同，他不知道每个老虎机吐钱的概率分布是什么，每个选择之后都会收到一个数字化的收益。赌徒的任务是在固定的次数，比如说选择100次，每次选择按下哪k个老虎机按钮的情况下，最大化收益。 在k臂赌博机问题中，每个动作（拉下k中的哪几个手柄）都会有一个期">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-11-07T07:55:00.000Z">
+<meta property="article:modified_time" content="2021-03-14T11:43:05.770Z">
+<meta property="article:author" content="Cong">
+<meta property="article:tag" content="Reinforcement Learning">
+<meta property="article:tag" content="读书笔记">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2017/11/07/Reading-Note-RL-Chapter2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>RL-CH2 MULTI-ARMED BANDITS | Cong's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Cong's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section">Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section">Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section">Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources" rel="section">resources</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/11/07/Reading-Note-RL-Chapter2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Cong">
+      <meta itemprop="description" content="sentimental is chemical defect">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cong's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RL-CH2 MULTI-ARMED BANDITS
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-11-07 15:55:00" itemprop="dateCreated datePublished" datetime="2017-11-07T15:55:00+08:00">2017-11-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-14 19:43:05" itemprop="dateModified" datetime="2021-03-14T19:43:05+08:00">2021-03-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="多臂赌博机-A-k-armed-Bandit-Problem"><a href="#多臂赌博机-A-k-armed-Bandit-Problem" class="headerlink" title="多臂赌博机(A k-armed Bandit Problem)"></a>多臂赌博机(A k-armed Bandit Problem)</h2><p>一个赌徒，要去摇老虎机，走进赌场一看，一排k个老虎机，外表一模一样，但是每个老虎机吐钱的概率不同，他不知道每个老虎机吐钱的概率分布是什么，每个选择之后都会收到一个数字化的收益。赌徒的任务是在固定的次数，比如说选择100次，每次选择按下哪k个老虎机按钮的情况下，最大化收益。</p>
+<p>在k臂赌博机问题中，每个动作（拉下k中的哪几个手柄）都会有一个期望收益。我们把$t$时间的选择的动作记作 $A_t$ ，相应的收益记作$R_t$，那么动作$a$的期望受益就可以写作：<br>$$<br>q_*(a)=E[R_t|A_t=a]<br>$$</p>
+<p>如果知道了每个动作的期望收益，那么选择期望最大的动作就是我们的策略。</p>
+<span id="more"></span>
+
+<h3 id="Exploiting-amp-Exploring"><a href="#Exploiting-amp-Exploring" class="headerlink" title="Exploiting &amp; Exploring"></a>Exploiting &amp; Exploring</h3><p>假设当前我们有了对动作价值（期望收益）的估计，在需要做出决策时我们有两个选择，一是选择价值最大的动作（Exploiting），这相当于墨守成规，根据已有的经验决定；二是选择价值非最大的动作(Exploring)，这是对策略的“探索”，可以避免当前策略陷入局部最优的情况。</p>
+<h2 id="基于动作的方法-Action-value-Methonds"><a href="#基于动作的方法-Action-value-Methonds" class="headerlink" title="基于动作的方法(Action-value Methonds)"></a>基于动作的方法(Action-value Methonds)</h2><p>我们把$t$时刻动作$a$的期望收益记作：<br>$$<br>Q_t(a)=\frac{\sum_{i=1}^{t-1}R_i|A_i=a}{\sum_{i=1}^{t-1}|A_i=a}<br>$$<br>其实就是t时刻前选择动作$a$的收益之和除以t时刻前选择动作$a$的次数。</p>
+<h3 id="varepsilon-greedy-action-selection"><a href="#varepsilon-greedy-action-selection" class="headerlink" title="$\varepsilon$-greedy action selection"></a>$\varepsilon$-greedy action selection</h3><p>在基于动作的方法中，$\varepsilon$-greedy是常用的方法。简单的说，就是在每次选择动作时，已$(1-\varepsilon)$的概率选择期望收益最大的动作（即$A_t={argmax}_aQ_t(a)$），以$\varepsilon$的概率随机选择动作。</p>
+<h2 id="The-10-armed-Testbed"><a href="#The-10-armed-Testbed" class="headerlink" title="The 10-armed Testbed"></a>The 10-armed Testbed</h2><p>$\varepsilon$的大小，选择的效果取决于不同的task。比如收益分布有着很大的方差，noisier也很严重，比较大的$\varepsilon$值比较好；反之收益分布的方差接近0，$\varepsilon＝0$，也就是所谓的greedy选择比较好。</p>
+<h2 id="增量计算-Incremental-Implementation"><a href="#增量计算-Incremental-Implementation" class="headerlink" title="增量计算(Incremental Implementation)"></a>增量计算(Incremental Implementation)</h2><p>把$Q_n(a)$记作动作$a$被选择$n$次之后的动作价值的估计：<br>$$<br>Q_n(a)=\frac{R_1+R_2+…+R_{n-1}}{n-1}<br>$$<br>那么:<br>$$<br>\begin{align}<br>Q_{n+1}(a)&amp;=\frac{1}{n}\sum_{i=1}^{n}R_i \\<br>&amp;=\frac{1}{n}(R_n+\sum_{i=1}^{n-1}R_i) \\<br>&amp;=\frac{1}{n}(R_n+(n-1)\frac{1}{n-1}\sum_{i-1}^{n-1}R_i) \\<br>&amp;=Q_n(a)+\frac{1}{n}[R_n-Q_n(a)]<br>\end{align}<br>$$<br>增量计算pseudocode如下：</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Initialize, <span class="keyword">for</span> a = <span class="number">1</span> <span class="keyword">to</span> k:</span><br><span class="line">    Q(a) = <span class="number">0</span></span><br><span class="line">    N(a) = <span class="number">0</span></span><br><span class="line"><span class="keyword">Repeat</span>:</span><br><span class="line">    A = argmaxQ(a)          <span class="keyword">with</span> probaility <span class="number">1</span>-e</span><br><span class="line">        a random action     <span class="keyword">with</span> probaility e</span><br><span class="line">    R = bandit(A)</span><br><span class="line">    N(A) = N(A)+<span class="number">1</span></span><br><span class="line">    Q(A) = Q(A)+<span class="number">1</span>/N(A)[R-Q(A)]</span><br></pre></td></tr></table></figure>
+
+<p>更新的规则其实是：<br>$$<br>NewEstimate = OldEstimate+StepSize[Target-OldEstimate]<br>$$</p>
+<h2 id="非平稳问题-Tracking-a-Nonstationary-Problem"><a href="#非平稳问题-Tracking-a-Nonstationary-Problem" class="headerlink" title="非平稳问题(Tracking a Nonstationary Problem)"></a>非平稳问题(Tracking a Nonstationary Problem)</h2><p>在许多情况下，增强学习处理的问题都是“非平稳”的，放在bandits问题上，就是每台老虎机的Reward分布随时间改变，一段时间赢钱概率高，一段时间输钱概率高。在这种情况下，最近的收益比起历史收益更加有用。对于非平衡问题，一种popular的方法是把常数当作 $StepSize$，n次选择后的动作$a$的收益变成了初始值$Q_1$和历史收益的加权平均：<br>$$<br>\begin{align}<br>Q_{n+1}&amp; = Q_n+\alpha[R_n-Q_n] \\<br>&amp;=\alpha R_n+(1-\alpha)Q_n \\<br>&amp;=\alpha R_n+(1-\alpha)[\alpha R_{n-1}+(1-\alpha)Q_{n-1}] \\<br>&amp;=(1-\alpha)^nQ_1+\sum_{i=1}^{n}\alpha(1-\alpha)^{n-i}R_i<br>\end{align}<br>$$<br>根据大数定律，$\alpha_n=\frac{1}{n}$会收敛到收益的真实值，但并不是所有的$StepSize$都会收敛。根据    stochastic approximation theory，只有步长满足以下条件时期望才回收敛：<br>$$<br>\sum_{n=1}^{\infty}\alpha_n(a)=\infty\\<br>\sum_{n=1}^{\infty}\alpha_n^2(a)&lt;\infty<br>$$<br>第一个条件保证了大量迭代后消除初值或者收益的波动的影响；第二个条件保证了收敛。</p>
+<p>当步长为常数时，显然不满足第二个条件，对收益的估计不会收敛，而是根据近期值不停地改变（这对于非平稳问题是有利的）。<strong>在理论研究中经常选择能够收敛的步长，然而在应用中却不这样。</strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reinforcement-Learning/" rel="tag"># Reinforcement Learning</a>
+              <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag"># 读书笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/11/07/Note_RL-CH2/" rel="prev" title="Reading Note：RL-CH2 Multi-Armed Bandits">
+      <i class="fa fa-chevron-left"></i> Reading Note：RL-CH2 Multi-Armed Bandits
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/11/07/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0_RL-CH2/" rel="next" title="读书笔记：RL-CH2 Multi-Armed Bandits">
+      读书笔记：RL-CH2 Multi-Armed Bandits <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E8%87%82%E8%B5%8C%E5%8D%9A%E6%9C%BA-A-k-armed-Bandit-Problem"><span class="nav-number">1.</span> <span class="nav-text">多臂赌博机(A k-armed Bandit Problem)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Exploiting-amp-Exploring"><span class="nav-number">1.1.</span> <span class="nav-text">Exploiting &amp; Exploring</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%8A%A8%E4%BD%9C%E7%9A%84%E6%96%B9%E6%B3%95-Action-value-Methonds"><span class="nav-number">2.</span> <span class="nav-text">基于动作的方法(Action-value Methonds)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#varepsilon-greedy-action-selection"><span class="nav-number">2.1.</span> <span class="nav-text">$\varepsilon$-greedy action selection</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-10-armed-Testbed"><span class="nav-number">3.</span> <span class="nav-text">The 10-armed Testbed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A2%9E%E9%87%8F%E8%AE%A1%E7%AE%97-Incremental-Implementation"><span class="nav-number">4.</span> <span class="nav-text">增量计算(Incremental Implementation)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E5%B9%B3%E7%A8%B3%E9%97%AE%E9%A2%98-Tracking-a-Nonstationary-Problem"><span class="nav-number">5.</span> <span class="nav-text">非平稳问题(Tracking a Nonstationary Problem)</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Cong</p>
+  <div class="site-description" itemprop="description">sentimental is chemical defect</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cong</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

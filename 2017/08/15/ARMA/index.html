@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Knowledge sharing by FC 基本概念随机过程设 $X_0, X_1,X_2…$ 是一列独立同分布的随机变量序列，令$$S_n &#x3D; S_0+X_1+X_2+…+X_n$$则随机变量序列 $$S_n$$ 为随机过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARMA">
+<meta property="og:url" content="http://example.com/2017/08/15/ARMA/index.html">
+<meta property="og:site_name" content="Cong&#39;s blog">
+<meta property="og:description" content="Knowledge sharing by FC 基本概念随机过程设 $X_0, X_1,X_2…$ 是一列独立同分布的随机变量序列，令$$S_n &#x3D; S_0+X_1+X_2+…+X_n$$则随机变量序列 $$S_n$$ 为随机过程。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-08-15T15:17:23.000Z">
+<meta property="article:modified_time" content="2021-03-14T11:43:05.769Z">
+<meta property="article:author" content="Cong">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2017/08/15/ARMA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>ARMA | Cong's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Cong's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section">Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section">Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section">Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources" rel="section">resources</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2017/08/15/ARMA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Cong">
+      <meta itemprop="description" content="sentimental is chemical defect">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cong's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ARMA
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-08-15 23:17:23" itemprop="dateCreated datePublished" datetime="2017-08-15T23:17:23+08:00">2017-08-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-14 19:43:05" itemprop="dateModified" datetime="2021-03-14T19:43:05+08:00">2021-03-14</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Knowledge sharing by FC</p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="随机过程"><a href="#随机过程" class="headerlink" title="随机过程"></a>随机过程</h2><p>设 $X_0, X_1,X_2…$ 是一列独立同分布的随机变量序列，令<br>$$<br>S_n = S_0+X_1+X_2+…+X_n<br>$$<br>则随机变量序列 $$S_n$$ 为随机过程。</p>
+<span id="more"></span>
+
+
+<h2 id="均值／协方差／方差函数"><a href="#均值／协方差／方差函数" class="headerlink" title="均值／协方差／方差函数"></a>均值／协方差／方差函数</h2><p>对于序列${X_t}$：</p>
+<ul>
+<li><p>均值函数：<br>$$<br>\mu_X(t)=E[X(t)]<br>$$<br>​</p>
+</li>
+<li><p>协方差函数：<br>$$<br>\gamma_X(s,t)=E[(X(s)-\mu_X(s))(X(t)-\mu_X(t))]<br>$$<br>​</p>
+</li>
+<li><p>方差函数：<br>$$<br>D_X(t)=r_X(t,t)=E[(X(s)-\mu_X(s))^2]<br>$$<br>Note:<br>为弱平稳的描述做准备。</p>
+</li>
+</ul>
+<h2 id="平稳性"><a href="#平稳性" class="headerlink" title="平稳性"></a>平稳性</h2><p>平稳性：时间序列的行为不随时间改变。</p>
+<h3 id="Why-stationary"><a href="#Why-stationary" class="headerlink" title="Why stationary?"></a>Why stationary?</h3><p>简化问题的假设。</p>
+<ul>
+<li>强平稳：对于一个时间序列${Z_t}$与任意整数k，如果<br>$$<br>Z_{t1}, Z_{t2},…,Z_{tn}<br>$$<br>与<br>$$<br>Z_{t1-k}, Z_{t2-k},…,Z_{tn-k}<br>$$<br>的联合分布一致，那么称该序列强平稳。</li>
+<li>弱平稳：对于一个序列，若其均值函数是常数，协方差函数仅与时间差相关，那么称该序列弱平稳。<br>Note:<br>强弱平稳并不相互包含。满足假设则预测结果好。ADF检验等，对不平稳的序列可做差分。</li>
+</ul>
+<h2 id="差分方程"><a href="#差分方程" class="headerlink" title="差分方程"></a>差分方程</h2><h3 id="一阶差分方程："><a href="#一阶差分方程：" class="headerlink" title="一阶差分方程："></a>一阶差分方程：</h3><p>一个变量在$t$时刻的值记作$y_t$，$t$时刻和$t-1$时刻的值可以由以下一阶线性差分方程刻画：<br>$$<br>y_t=\phi y_{t-1+w_t}<br>$$<br>差分方程表达一个变量与他前期值的关系。</p>
+<h3 id="p阶差分方程"><a href="#p阶差分方程" class="headerlink" title="p阶差分方程"></a>p阶差分方程</h3><p>$$<br>y_t=\phi_ty_{t-1}+\phi_2y_{t-2}+…+\phi_py_{t-p}+w_t<br>$$</p>
+<h3 id="差分方程的递归解"><a href="#差分方程的递归解" class="headerlink" title="差分方程的递归解"></a>差分方程的递归解</h3><p>$$<br>y_t=\phi^{t+1}y_{-1}+(w_t+\phi w_{t-1}+\phi^2w_{t-2}+…+\phi^{t-1}w_1＋\phi^tw_0)<br>$$</p>
+<h3 id="动态乘子"><a href="#动态乘子" class="headerlink" title="动态乘子"></a>动态乘子</h3><p>$$<br>\frac{\partial y_t}{\partial w_0}=\phi^t,\frac{\partial y_{t+j}}{\partial w_t}=\phi^j<br>$$<br>Note:<br>描述t时刻的扰动wt对于j时刻后的影响。<br>phi的取值以1为界对于过程的影响（消散，放大）</p>
+<h2 id="延迟算子"><a href="#延迟算子" class="headerlink" title="延迟算子"></a>延迟算子</h2><p>令B为一步延迟算子，如果当前序列乘以一个延迟算子，表示把当前序列值的时间向过去拨一个时刻。<br>使用延迟算子表示的一阶差分方程:<br>$$<br>y_t=\phi y_{t-1}+w_t\\<br>y_t=\phi By_t+w_t\\<br>(1-\phi B)y_t=w_t<br>$$</p>
+<h3 id="延迟算子性质"><a href="#延迟算子性质" class="headerlink" title="延迟算子性质"></a>延迟算子性质</h3><p>$$<br>\begin{align}<br>BX_t&amp;=X_{t-1}\\<br>B^2X_t&amp;=X_{t-2}\\<br>&amp;…\\<br>B^nX_t&amp;=X_{t-n}\\<br>\end{align}<br>$$<br>$$<br>\begin{align}<br>&amp;(1)B^0=1\\<br>&amp;(2)若c为任意常数，则B(cX_t)=cB(X_t)=cX_{t-1}\\<br>&amp;(3)(1-B)^n=\sum_{i=0}^n \frac{(-1)^n n!}{i!(n-i)!}B^i<br>\end{align}<br>$$</p>
+<h1 id="线性平稳时间序列"><a href="#线性平稳时间序列" class="headerlink" title="线性平稳时间序列"></a>线性平稳时间序列</h1><h2 id="自回归过程（AR）"><a href="#自回归过程（AR）" class="headerlink" title="自回归过程（AR）"></a>自回归过程（AR）</h2><p>一阶自回归过程AR(1)：</p>
+<p>如${X_t}$为平稳序列，且满足如下差分方程：<br>$$<br>X_t=c+\phi X_{t-1}+\varepsilon_t<br>$$<br>其中系数表示对前一项的依赖程度，扰动为白噪声序列，则称${X_t}$满足一阶自回归模型。<br>Note:<br>WN: mean=0 方差sigma，不少分析中会先把序列中心化，即减均值。认为序列与前期值有关。</p>
+<h3 id="平稳条件："><a href="#平稳条件：" class="headerlink" title="平稳条件："></a>平稳条件：</h3><p>特征方程：$\lambda-\phi=0$的根的绝对值小于1，即<br>$$<br>|\phi|&lt;1<br>$$<br>Note:<br>这与差分方程中动态乘子的意义一致。</p>
+<h3 id="方差与均值"><a href="#方差与均值" class="headerlink" title="方差与均值"></a>方差与均值</h3><p>$$<br>E(X_t)=\frac{c}{1-\phi}\\<br>E(X_t-\mu)^2=\frac{\sigma^2}{1-\phi^2}<br>$$</p>
+<p>利用延迟算子，一阶自回归模型可以表示为：<br>$$<br>(1-\phi B)X_t=c+\varepsilon_t\\<br>\begin{align}<br>X_t&amp;=(1-\phi B)^{-1}(c+\varepsilon_t)\\<br>&amp;=\frac{c}{1-\phi}+(1-\phi B)^{-1}\varepsilon_t<br>\end{align}<br>$$<br>如果满足平稳条件，则可表示为：<br>$$<br>\begin{align}<br>X_t&amp;=\frac{c}{1-\phi}+(1+\phi B+…+\phi^j B^j+…)\varepsilon_t\\<br>&amp;=\frac{c}{1-\phi}+\varepsilon_t+\phi\varepsilon_{t-1}+…+\phi^j\epsilon_{t-j}…<br>\end{align}<br>$$<br>Note:<br>类似于一个数列极限。平稳则扰动项必须收敛，否则与影响无限扩大。AR1是一个无限阶的移动平均过程。</p>
+<h2 id="2-2-移动平均过程"><a href="#2-2-移动平均过程" class="headerlink" title="2.2 移动平均过程"></a>2.2 移动平均过程</h2><p>一阶移动平均过程MA(1)：</p>
+<p>${X_t}$若满足如下方程：<br>$$<br>X_t=\mu+\varepsilon_t-\theta\varepsilon_{t-1}<br>$$<br>其中$\mu$为常数，$\theta$为移动平均系数，$\varepsilon$为白噪声过程，则称${X_t}$满足一阶移动平均模型。<br>Note:<br>认为序列和前一时刻的扰动有关。</p>
+<h2 id="MA-1-的均值与方差"><a href="#MA-1-的均值与方差" class="headerlink" title="MA(1)的均值与方差"></a>MA(1)的均值与方差</h2><p>$$<br>E(X_t)=\mu<br>$$<br>$$<br>E(X_t-\mu)^2=E(\varepsilon_t-\theta\varepsilon_{t-1})^2=(1+\theta^2)\sigma^2<br>$$</p>
+<h2 id="自回归移动平均过程"><a href="#自回归移动平均过程" class="headerlink" title="自回归移动平均过程"></a>自回归移动平均过程</h2><p>ARMA(p,q)模型的一般表达式为：<br>$$<br>X_t=c+\phi_1 X_{t-1}+…+\phi_p X_{t-p}+\\<br>\varepsilon_t-\theta_1\varepsilon_{t-1}-…-\theta_q\varepsilon_{t-q}\\<br>\forall s&lt;t, E(X_s\varepsilon_t)=0<br>$$</p>
+<h2 id="相关系数"><a href="#相关系数" class="headerlink" title="相关系数"></a>相关系数</h2><h3 id="自相关系数ACF"><a href="#自相关系数ACF" class="headerlink" title="自相关系数ACF"></a>自相关系数ACF</h3><p>AR(1)的自协方差与自相关系数：<br>$$<br>\gamma_k=E(x_tx_{t-k})=\phi_1E(x_{t-1}x_{t-k})+E(\varepsilon_tx_{t-k})=\phi_1\gamma_{k-1}\\<br>\gamma_k=\phi_1^k\gamma_0<br>$$<br>$$<br>\rho_k=\frac{\gamma_k}{\gamma_0}=\phi_1^k<br>$$<br>Note:<br>这里是中心化后的序列，自协方差受幅度影响，相关系数去除幅度影响。</p>
+<p>AR(p)的自协方差与自相关系数：<br>$$<br>\gamma_k=\phi_1\gamma_{k-1}+…+\phi_p\gamma_{k-p}, k&gt;0\\<br>\rho_k=\phi_1\rho_{k-1}+…+\phi_p\rho_{k-p}, k&gt;0<br>$$<br>（Yule-Walker方程，系数阵正定，可解回归系数）<br>Note:<br>p1=1，自己和自己的相关系数。模型定阶后可以求p阶协方差，解方程组。</p>
+<p>MA(1)的自协方差与自相关系数：<br>$$<br>\gamma=E(x_t-\mu)(x_{t-k}-\mu)=E(\varepsilon-\theta\varepsilon_{t-1})(\varepsilon_{t-k}-\theta\varepsilon_{t-k-1})\\<br>\gamma_0=(1+\theta^2)\sigma^2\\<br>\gamma_1=\theta\sigma^2\\<br>\gamma_k=0,k&gt;1\\<br>\rho_1=\frac{\theta\sigma^2}{(1+\theta^2)\sigma^2}=\frac{\theta}{1+\theta^2}<br>$$<br>高阶自相关系数均为0。</p>
+<p>MA(q)的自协方差与自相关系数：<br>$$<br>\gamma_j=(\theta_j+\theta_{j+1}\theta_1+\theta_{j+2}\theta_2+…+\theta_q\theta_{q-j})\sigma^2, j=1,2,…,q\\<br>\rho_j=\frac{\theta_j+\theta_1\theta_{j+1}+…+\theta_{q-j}\theta_{q}}{1+\theta_1^2+…+\theta_q^2}, j=1,2,…,q<br>$$<br>解非线性方程，可得滑动平均系数。<br>Note:<br>for j&gt;q, gamma=0,p=0，解非线性方程，可得滑动平均系数</p>
+<p>ARMA(p,q)的自协方差与自相关系数：<br>$$<br>X_t=c+\phi_1 X_{t-1}+…+\phi_p X_{t-p}+\\<br>\varepsilon_t-\theta_1\varepsilon_{t-1}-…-\theta_q\varepsilon_{t-q}<br>$$</p>
+<p>先同乘以$X_{t-k}$，求均值得自协方差，得到Yule-Walker方程，求回归系数，然后构造：</p>
+<p>$$<br>X_t^*=X_t-(\phi_1 X_{t-1}-…-\phi_p X_{t-p})<br>$$<br>$X_t^*$为MA(q)序列，按MA(q)序列计算自协方差／自相关系数，解非线性方程得滑动回归系数。</p>
+<h2 id="相关系数-1"><a href="#相关系数-1" class="headerlink" title="相关系数"></a>相关系数</h2><h3 id="偏自相关系数PACF"><a href="#偏自相关系数PACF" class="headerlink" title="偏自相关系数PACF"></a>偏自相关系数PACF</h3><p>$$<br>\begin{align}<br>\varphi_{11}&amp;=\rho_1\\<br>\varphi_{k+1,k+1}&amp;=(\rho_{k+1}-\sum_{j=1}^k\rho_{k+1-j}\varphi_{k,j})(1-\sum_{j=1}^k\rho_j\varphi_{k,j})\\<br>\varphi_{k+1,j}&amp;=\varphi_{k,j}-\varphi_{k+1,k+1}\varphi_{k+1,k+1-j}, j=1,2,…k<br>\end{align}<br>$$<br>Note:<br>用于定阶。</p>
+<p>$$<br>D=<br>\begin{vmatrix}<br>1 &amp; \rho_1 &amp; \cdots &amp; \rho_{k-1}\\<br>\rho_1 &amp; 1 &amp; \cdots &amp;  \rho_{k-2}\\<br>\vdots &amp; \vdots &amp;        &amp;\vdots\\<br> \rho_{k-1} &amp;  \rho_{k-2} &amp; \cdots &amp; 1\\<br>\end{vmatrix}<br>$$<br>$$<br>D_k=<br>\begin{vmatrix}<br>1 &amp; \rho_1 &amp; \cdots &amp; \rho_{k-1}\\<br>\rho_1 &amp; 1 &amp; \cdots &amp;  \rho_{k-2}\\<br>\vdots &amp; \vdots &amp;        &amp;\vdots\\<br> \rho_{k-1} &amp;  \rho_{k-2} &amp; \cdots &amp; \rho_k\\<br>\end{vmatrix}<br>$$<br>$$<br>\varphi_{kk}=\frac{D_k}{D}<br>$$</p>
+<h2 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h2><h2 id="模型（阶数）识别"><a href="#模型（阶数）识别" class="headerlink" title="模型（阶数）识别"></a>模型（阶数）识别</h2><p>ACF/PACF定阶</p>
+<table>
+<thead>
+<tr>
+<th>序列</th>
+<th>AR(p)</th>
+<th>MA(q)</th>
+<th>ARMA(p,q)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ACF</td>
+<td>拖尾</td>
+<td>q阶截尾</td>
+<td>拖尾</td>
+</tr>
+<tr>
+<td>PACF</td>
+<td>p阶截尾</td>
+<td>拖尾</td>
+<td>拖尾</td>
+</tr>
+</tbody></table>
+
+
+
+
+<p>AIC／BIC准则：<br>$$<br>AIC(p,q)=ln\hat\sigma_k^2+\frac{2(p+q+1)}{N}\\<br>BIC(p,q)=log\hat\sigma_k^2+\frac{p+q+1}{N}logN<br>$$<br>选择最大阶数（$N^\frac{1}{2},logN,\frac{N}{10}$），</p>
+<p>计算使AIC or BIC最小的p，q，作为模型阶数。<br>Note:<br>耗时，每次要计算出模型，再计算拟合残差，MAXLAG^2次计算。</p>
+<h2 id="参数估计"><a href="#参数估计" class="headerlink" title="参数估计"></a>参数估计</h2><ul>
+<li>矩估计</li>
+<li>极大似然估计<br>Note:<br>矩估计：Yuler-Walker方程等。</li>
+</ul>
+<h3 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h3><p>以AR(1)为例：<br>$$<br>X_t=c+\phi X_{t-1}+\varepsilon_t<br>$$<br>序列观测值：$x_1,…x_T$<br>$\varepsilon_t$为白噪声，参数为$\theta=(\phi, \sigma^2)$<br>对于第一个样本，$X_1:N(\frac{c}{1-\phi},\frac{\sigma^2}{1-\phi^2})$，即$X_1$的概率分布：<br>$$<br>f_{X_1}(x_1;\phi,\sigma^2)=\frac{1}{\sqrt{2\pi}\sqrt{\sigma^2/(1-\phi^2)}}exp[-\frac{x_1^2}{2\sigma^2/(1-\phi^2)}]<br>$$<br>Note:<br>假设X1的期望与方差，与2.3中分析的一致。如果认为初始值也服从N(0,\sigma^2)，则忽略了初始值之前的影响。</p>
+<p>考察，第二个样本$X_2$在$X_1=x_1$已知条件下的概率分布，由于<br>$$<br>X_2=c+\phi X_1+\varepsilon_2<br>$$<br>$$<br>f_{X_2|X_1}(x_2|x_1;\phi,\sigma^2)=\frac{1}{\sqrt{2\pi}\sigma}exp[-\frac{(x_2-\phi x_1)^2}{2\sigma^2}]<br>$$<br>根据贝叶斯公式，$X_1,X_2$的联合分布为：<br>$$<br>f_{X_1,X_2}(x_1,x_2;\phi,\sigma^2)=f_{X_1}(x_1;\phi,\sigma^2)f_{X_2|X_1}(x_2|x_1;\phi,\sigma^2)<br>$$<br>Note:<br>X2~N((c+\phi x_1), \sigma^2)。常数+\varepsilon_t。</p>
+<p>在前t－1个值已知的条件下，实际上$X_t$仅与$X_{t-1}$有关：<br>$$<br>f_{X_t|X_{t-1},…,X_1}(x_t|x_{t-1},…,x_1;\phi,\sigma^2)=\frac{1}{\sqrt{2\pi}\sigma}exp[-\frac{(x_t-\phi x_{t-1})^2}{2\sigma^2}]<br>$$<br>则$X_T…X_1$的联合分布为：<br>$$<br>f_{X_T,…,X_1}(x_T,…,x_1;\phi,\sigma^2)=f_{X_1}(x_1;\phi,\sigma^2)\prod_{t=2}^{T}f_{X_t|X_{t-1}}(x_t|x_{t-1};\phi,\sigma^2)<br>$$</p>
+<p>对数似然函数为：<br>$$<br>L(\phi,\sigma^2)＝-\frac{T}{2}log(2\pi)-\frac{1}{2}log[\sigma^2/(1-\phi^2)]-\frac{1}{2\sigma^2/(1-\sigma^2)}x_1^2\\<br>-[(T-1)/2]log(\sigma^2)-\frac{1}{2\sigma^2}\sum_{t=2}^{T}(x_t-\phi x_{t-1})^2<br>$$<br>Note:<br>求偏导数＝0的点。</p>
+<p>向量形式：<br>$$<br>x = (x_1,x_2,…,x_T)^T\\<br>\Omega=\\<br>\begin{vmatrix}<br>E(X_1-\mu)^2 &amp; E(X_1-\mu)(X_2-\mu) &amp; \cdots &amp; E(X_1-\mu)(X_T-\mu)\\<br>E(X_2-\mu)(X_1-\mu) &amp; E(X_2-\mu)^2 &amp; \cdots &amp; E(X_2-\mu)(X_T-\mu)\\<br>\vdots &amp; \vdots &amp;        &amp;\vdots\\<br>E(X_T-\mu)(X_1-\mu) &amp;  E(X_T-\mu)(X_2-\mu) &amp; \cdots &amp; E(X_T-\mu)^2\\<br>\end{vmatrix}<br>$$</p>
+<p>$$<br>\Omega=\sigma^2 V\\<br>V=\frac{1}{1-\phi^2}<br>\begin{vmatrix}<br>1 &amp; \phi &amp; \cdots &amp; \phi^{T-1}\\<br>\phi &amp; 1 &amp; \cdots &amp; \phi^{T-2}\\<br>\vdots &amp; \vdots &amp;        &amp;\vdots\\<br>\phi^{T-1} &amp;  \phi^{T-2} &amp; \cdots &amp; 1\\<br>\end{vmatrix}<br>$$<br>$$<br>f_X(x;\phi,\sigma)=(2\pi)^{-T/2}|\Omega^{-1}|^{1/2}exp[-\frac{1}{2}(x-\mu)^t\Omega^{-1}(x-\mu)]<br>$$</p>
+<p>MA(1)的似然函数：<br>$$<br>x_t=\mu+\varepsilon_t-\theta\varepsilon_{t-1}\\<br>L(\theta)=-\frac{T}{2}-\frac{T}{2}log(\sigma^2)-\sum_{t=1}^T\frac{\varepsilon_t^2}{2\sigma^2}<br>$$<br>$$<br>\varepsilon_t=(x_t-\mu)-\theta(x_{t-1}-\mu)+\theta^2(x_{t-2}-\mu)+…+(-1)^t\theta^t\varepsilon_0<br>$$<br>Note:<br>epsilon序列可表示为\theta的函数，非线性函数。</p>
+<p>向量形式：<br>$$<br>\Omega=\sigma^2<br>\begin{vmatrix}<br>(1+\theta^2) &amp; \theta &amp; 0 &amp; \cdots &amp; 0\\<br>\theta &amp;(1+\theta^2) &amp; \theta &amp; \cdots &amp; 0\\<br>0 &amp; \theta &amp; (1+\theta^2) &amp; \cdots &amp; 0\\<br>\vdots &amp; \vdots &amp;  \vdots &amp;     &amp;\vdots\\<br>0 &amp;  0  &amp; 0 &amp; \cdots &amp; (1+\theta^2)\\<br>\end{vmatrix}<br>$$<br>$$<br>f_X(x;\theta)=(2\pi)^{-T/2}|\Omega|^{-1/2}exp[-\frac{1}{2}(x-\mu)^t\Omega^{-1}(x-\mu)]<br>$$</p>
+<p>ARMA(p,q)的极大似然估计：<br>令$\beta=(\phi_1,…,\phi_p,\theta_1,…,\theta_q)$，</p>
+<p>似然函数为：<br>$$<br>L(\beta)=-\frac{T}{2}log(2\pi)-\frac{T}{2}log(\sigma^2)-\sum_{t=1}^{T}\frac{\varepsilon_t^2}{2\sigma^2}<br>$$<br>$$<br>\varepsilon_t=x_t-c-\phi_1x_{t-1}-…-\phi_px_{t-p}\\<br>-\theta_1\varepsilon_{t-1}-…-\theta_q\varepsilon_{t-q}<br>$$<br>Note:<br>参数包含在epsilon序列中</p>
+<h1 id="一个实验"><a href="#一个实验" class="headerlink" title="一个实验"></a>一个实验</h1><p>data：601000.ss, from 2014-8-9 to 2017-4-20，BIC准则定阶，前300个作为训练集，ARMA(4,0)。结果：RMSE:<br>0.30651974757<br>MAPE<br>0.0123583871228</p>
+
+
+
+
+
+
+
+
+
+
+<p>That’s all</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/06/13/2017-Champion-Warriors/" rel="prev" title="2017 Champion Warriors">
+      <i class="fa fa-chevron-left"></i> 2017 Champion Warriors
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/11/07/Note_RL-CH2/" rel="next" title="Reading Note：RL-CH2 Multi-Armed Bandits">
+      Reading Note：RL-CH2 Multi-Armed Bandits <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E8%BF%87%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">随机过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9D%87%E5%80%BC%EF%BC%8F%E5%8D%8F%E6%96%B9%E5%B7%AE%EF%BC%8F%E6%96%B9%E5%B7%AE%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text">均值／协方差／方差函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B3%E7%A8%B3%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">平稳性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-stationary"><span class="nav-number">1.3.1.</span> <span class="nav-text">Why stationary?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%AE%E5%88%86%E6%96%B9%E7%A8%8B"><span class="nav-number">1.4.</span> <span class="nav-text">差分方程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E9%98%B6%E5%B7%AE%E5%88%86%E6%96%B9%E7%A8%8B%EF%BC%9A"><span class="nav-number">1.4.1.</span> <span class="nav-text">一阶差分方程：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#p%E9%98%B6%E5%B7%AE%E5%88%86%E6%96%B9%E7%A8%8B"><span class="nav-number">1.4.2.</span> <span class="nav-text">p阶差分方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%AE%E5%88%86%E6%96%B9%E7%A8%8B%E7%9A%84%E9%80%92%E5%BD%92%E8%A7%A3"><span class="nav-number">1.4.3.</span> <span class="nav-text">差分方程的递归解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E4%B9%98%E5%AD%90"><span class="nav-number">1.4.4.</span> <span class="nav-text">动态乘子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E7%AE%97%E5%AD%90"><span class="nav-number">1.5.</span> <span class="nav-text">延迟算子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E7%AE%97%E5%AD%90%E6%80%A7%E8%B4%A8"><span class="nav-number">1.5.1.</span> <span class="nav-text">延迟算子性质</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%B9%B3%E7%A8%B3%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97"><span class="nav-number">2.</span> <span class="nav-text">线性平稳时间序列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%9B%9E%E5%BD%92%E8%BF%87%E7%A8%8B%EF%BC%88AR%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">自回归过程（AR）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B3%E7%A8%B3%E6%9D%A1%E4%BB%B6%EF%BC%9A"><span class="nav-number">2.1.1.</span> <span class="nav-text">平稳条件：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%B7%AE%E4%B8%8E%E5%9D%87%E5%80%BC"><span class="nav-number">2.1.2.</span> <span class="nav-text">方差与均值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E8%BF%87%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 移动平均过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MA-1-%E7%9A%84%E5%9D%87%E5%80%BC%E4%B8%8E%E6%96%B9%E5%B7%AE"><span class="nav-number">2.3.</span> <span class="nav-text">MA(1)的均值与方差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%9B%9E%E5%BD%92%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E8%BF%87%E7%A8%8B"><span class="nav-number">2.4.</span> <span class="nav-text">自回归移动平均过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0"><span class="nav-number">2.5.</span> <span class="nav-text">相关系数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0ACF"><span class="nav-number">2.5.1.</span> <span class="nav-text">自相关系数ACF</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0-1"><span class="nav-number">2.6.</span> <span class="nav-text">相关系数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%8F%E8%87%AA%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0PACF"><span class="nav-number">2.6.1.</span> <span class="nav-text">偏自相关系数PACF</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="nav-number">2.7.</span> <span class="nav-text">实际应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%EF%BC%88%E9%98%B6%E6%95%B0%EF%BC%89%E8%AF%86%E5%88%AB"><span class="nav-number">2.8.</span> <span class="nav-text">模型（阶数）识别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E4%BC%B0%E8%AE%A1"><span class="nav-number">2.9.</span> <span class="nav-text">参数估计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="nav-number">2.9.1.</span> <span class="nav-text">极大似然估计</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%AE%9E%E9%AA%8C"><span class="nav-number">3.</span> <span class="nav-text">一个实验</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Cong</p>
+  <div class="site-description" itemprop="description">sentimental is chemical defect</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cong</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
